@@ -31,10 +31,10 @@ class VMtx_fatture
 					where i.store = :store and i.ddate = :ddate and i.reg = :reg and i.trans = :trans and i.totaltaxableamount <> 0";
 			$stmt = $this->pdo->prepare($sql);
 			$stmt->execute([
-				'store' => $request['store'],
-				'ddate' => $request['ddate'],
-				'reg' => $request['reg'],
-				'trans' => $request['trans'],
+				':store' => $request['store'],
+				':ddate' => $request['ddate'],
+				':reg' => $request['reg'],
+				':trans' => $request['trans'],
 			]);
 			$fattura['righe'] = $stmt->fetchAll( \PDO::FETCH_ASSOC );
 
@@ -43,10 +43,10 @@ class VMtx_fatture
 					where i.store = :store and i.ddate = :ddate and i.reg = :reg and i.trans = :trans and binary recordtype = 'V'";
 			$stmt = $this->pdo->prepare($sql);
 			$stmt->execute([
-				'store' => $request['store'],
-				'ddate' => $request['ddate'],
-				'reg' => $request['reg'],
-				'trans' => $request['trans'],
+				':store' => $request['store'],
+				':ddate' => $request['ddate'],
+				':reg' => $request['reg'],
+				':trans' => $request['trans'],
 			]);
 			$fattura['repartiIva'] = $stmt->fetchAll( \PDO::FETCH_ASSOC );
 
