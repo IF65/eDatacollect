@@ -1,9 +1,11 @@
 <?php
     namespace Database;
 
+    use Database\Viste\VMtxFatture;
     use \PDO;
     use Database\Tabelle\TIdc;
     use Database\Viste\VTcp_transazioni;
+    use Database\Viste\VMtx_fatture;
     use PDOException;
 
 
@@ -14,6 +16,7 @@
         
         public $t_idc = null;
         public $v_tcp_transazioni = null;
+        public $v_mtx_fatture = null;
 
         private $sqlDetails = null;
 
@@ -51,6 +54,7 @@
                 // apertura viste
                 // ----------------------------------------------------------
                 $this->v_tcp_transazioni = New VTcp_transazioni();
+		        $this->v_mtx_fatture = New VMtx_fatture($this->pdo);
 
                 return true;
             } catch (PDOException $e) {
@@ -157,6 +161,10 @@
 
         public function elencoFattureEmesse(): string {
             return $this->v_tcp_transazioni->elencoFattureEmesse();
+        }
+
+        public function creaFatturaMtx(array $request):string {
+	        return $this->v_mtx_fatture->creaFattura($request);
         }
 
         public function __destruct() {
