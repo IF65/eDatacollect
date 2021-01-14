@@ -24,7 +24,7 @@ if ($debug) {
     //file_put_contents('/Users/if65/Desktop/testFatture.txt', $result);
     //$input = "{\"function\":\"recuperaBarcode\",\"articoli\":[\"6364070\"]}";
     //$input = "{\"function\":\"recuperaSospesi\",\"data\":\"2020-11-25\",\"sede\":\"0101\"}";
-	$input = "{\"function\":\"creaFatturaMtx\",\"data\":\"2021-01-13\",\"sede\":\"0101\",\"reg\":\"002\",\"trans\":\"5041\"}";
+	$input = "{\"function\":\"creaFatturaMtx\",\"ddate\":\"2021-01-13\",\"store\":\"0128\",\"reg\":\"002\",\"trans\":\"5041\"}";
 
 
     $request = json_decode($input, true);
