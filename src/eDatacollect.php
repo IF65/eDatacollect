@@ -15,7 +15,7 @@ if ($debug) {
     //$input = "{\"function\":\"recuperaMTXRigheFatture\",\"ddate\":\"2021-01-03\",\"store\":\"0101\",\"reg\":\"001\",\"trans\":\"6228\"}";
     //$input = "{\"function\":\"creazioneDatacollectEpipoli\",\"data\":\"2020-07-29\"}";
     //$input = "{\"function\":\"recuperaDatiPerQuadratura\",\"data\":\"2020-10-25\",\"sede\":\"0136\"}";
-    //$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2020-11-24\",\"sede\":\"0190\"}";
+    $input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-01-16\",\"sede\":\"0107\"}";
     //$input = "{\"function\":\"recuperaFatture\"}";
     //$input = "{\"function\":\"creaFileInterscambioFatture\"}";
     //$input = "{\"function\":\"creazioneDatacollectRiepvegiTxt\",\"data\":\"2020-09-06\",\"sede\":\"0501\"}";
@@ -24,7 +24,7 @@ if ($debug) {
     //file_put_contents('/Users/if65/Desktop/testFatture.txt', $result);
     //$input = "{\"function\":\"recuperaBarcode\",\"articoli\":[\"6364070\"]}";
     //$input = "{\"function\":\"recuperaSospesi\",\"data\":\"2020-11-25\",\"sede\":\"0101\"}";
-	$input = "{\"function\":\"creaFatturaMtx\",\"ddate\":\"2021-01-13\",\"store\":\"0128\",\"reg\":\"002\",\"trans\":\"5041\"}";
+	//$input = "{\"function\":\"creaFatturaMtx\",\"ddate\":\"2021-01-13\",\"store\":\"0128\",\"reg\":\"002\",\"trans\":\"5041\"}";
 
 
     $request = json_decode($input, true);

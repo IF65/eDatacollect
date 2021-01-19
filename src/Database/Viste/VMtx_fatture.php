@@ -52,7 +52,7 @@ class VMtx_fatture
 			$fattura['repartiIva'] = $stmt->fetchAll( \PDO::FETCH_ASSOC );
 
 			$sql = "select ifnull(totalamount,0) totale from mtx.idc as i 
-					where i.store = '0128' and i.ddate = '21-01-13' and i.reg = '002' and i.trans = '5041' and binary recordtype = 'F';";
+					where i.store = :store and i.ddate = :ddate and i.reg = :reg and i.trans = :trans and binary recordtype = 'F';";
 			$stmt = $this->pdo->prepare($sql);
 			$stmt->execute([
 				':store' => $request['store'],
