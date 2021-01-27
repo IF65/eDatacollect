@@ -66,5 +66,6 @@ class VMtx_fatture
 		} catch (PDOException $e) {
 			return json_encode(['errorMessage' => $e->getMessage(), 'fattura' => '', 'status'=>100]);
 		}
+
 	}
 }
