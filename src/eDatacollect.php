@@ -14,8 +14,8 @@ $timeZone = new \DateTimeZone('Europe/Rome');
 if ($debug) {
     //$input = "{\"function\":\"recuperaMTXRigheFatture\",\"ddate\":\"2021-01-03\",\"store\":\"0101\",\"reg\":\"001\",\"trans\":\"6228\"}";
     //$input = "{\"function\":\"creazioneDatacollectEpipoli\",\"data\":\"2020-07-29\"}";
-    //$input = "{\"function\":\"recuperaDatiPerQuadratura\",\"data\":\"2020-10-25\",\"sede\":\"0136\"}";
-    $input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-01-25\",\"sede\":\"0170\"}";
+    $input = "{\"function\":\"recuperaDatiPerQuadratura\",\"data\":\"2021-01-28\",\"sede\":\"0201\"}";
+    //$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-01-25\",\"sede\":\"0170\"}";
     //$input = "{\"function\":\"recuperaFatture\"}";
     //$input = "{\"function\":\"creaFileInterscambioFatture\"}";
     //$input = "{\"function\":\"creazioneDatacollectRiepvegiTxt\",\"data\":\"2020-09-06\",\"sede\":\"0501\"}";

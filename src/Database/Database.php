@@ -68,7 +68,7 @@
 
         public function recuperaDatiPerQuadratura(array $request): string {
             if ($request['sede'] == '0501' || $request['sede'] == '0201') {
-                $casseTCPOS = json_decode($this->v_tcp_transazioni->recuperaDatiPerQuadratura( $request ), true);
+	            $casseTCPOS = json_decode($this->v_tcp_transazioni->recuperaDatiPerQuadratura( $request ), true);
                 $casseASAR = json_decode($this->t_idc->recuperaDatiPerQuadratura($request), true);
 
                 $result = [];
@@ -76,7 +76,11 @@
                     if (preg_match('/^(0500)(.*)$/', $riga['id'], $matches)) {
                         $riga['id'] = '0501' . $matches[2];
                     }
-                    $result[] = $riga;
+	                if (preg_match('/^(\d{4}).*$/', $riga['id'], $matches)) {
+	                	if ($matches[1] == $request['sede']) {
+			                $result[] = $riga;
+		                }
+	                }
                 }
 
                 foreach ($casseASAR as $riga) {
