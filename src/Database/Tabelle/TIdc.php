@@ -130,7 +130,7 @@ class TIdc extends TTable {
 
 	public function incassiInTempoReale(array $request): array {
     	try {
-		    $stmt = "select store codice, count(*) scontrini, sum(totalamount) importo from mtx.idc where ddate = :ddate and recordcode1=1 and recordtype = 'F' group by 1 with rollup";
+		    $stmt = "select store codice, count(*) scontrini, sum(totalamount) importo from mtx.idc where ddate = :ddate and recordcode1=1 and recordtype = 'F' group by 1";
 		    $handler = $this->pdo->prepare($stmt);
 
 		    $result = [];
