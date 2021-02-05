@@ -605,7 +605,7 @@ class VTcp_transazioni
         return implode("\n", $riepvegi) . "\n";
     }
 
-    public function incassiInTempoReale(array $request): string {
+    public function incassiInTempoReale(array $request): array {
         $data = $request['data'];
 
         $conn = new \PDO("sqlsrv:Server=".$this->hostname.",9089;Database=".$this->dbname, $this->username, $this->password);
@@ -618,7 +618,7 @@ class VTcp_transazioni
                         when left(sh.code, 4) = '0600' then '0502' 	
                         when left(sh.code, 4) = '0700' then '0503' 
                     else 
-                    '0500' 
+	                    left(sh.code, 4) 
                     end codice,
                     sum(t.total_amount) importo,
                     count(*) scontrini
@@ -630,13 +630,13 @@ class VTcp_transazioni
                         when left(sh.code, 4) = '0600' then '0502' 	
                         when left(sh.code, 4) = '0700' then '0503' 
                     else 
-                    '0500' 
+                    	left(sh.code, 4) 
                     end";
 
-        $result = '';
+        $result = [];
         $stmt = $conn->query( $stmt );
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
-            $result .= sprintf('%4s%012d%010d', $row['codice'], round($row['importo'] * 100, 0), $row['scontrini']);
+	        $result[] = $row;
         }
 
         return $result;

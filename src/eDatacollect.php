@@ -13,9 +13,9 @@ $timeZone = new \DateTimeZone('Europe/Rome');
 
 if ($debug) {
     //$input = "{\"function\":\"recuperaMTXRigheFatture\",\"ddate\":\"2021-01-03\",\"store\":\"0101\",\"reg\":\"001\",\"trans\":\"6228\"}";
-    //$input = "{\"function\":\"creazioneDatacollectEpipoli\",\"data\":\"2020-07-29\"}";
-    $input = "{\"function\":\"recuperaDatiPerQuadratura\",\"data\":\"2021-01-28\",\"sede\":\"0201\"}";
-    //$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-01-25\",\"sede\":\"0170\"}";
+    //$input = "{\"function\":\"creazioneDatacollectEpipoli\",\"data\":\"2021-01-31\"}";
+    //$input = "{\"function\":\"recuperaDatiPerQuadratura\",\"data\":\"2021-01-31\",\"sede\":\"0138\"}";
+    //$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-01-26\",\"sede\":\"3692\"}";
     //$input = "{\"function\":\"recuperaFatture\"}";
     //$input = "{\"function\":\"creaFileInterscambioFatture\"}";
     //$input = "{\"function\":\"creazioneDatacollectRiepvegiTxt\",\"data\":\"2020-09-06\",\"sede\":\"0501\"}";
@@ -26,6 +26,7 @@ if ($debug) {
     //$input = "{\"function\":\"recuperaSospesi\",\"data\":\"2020-11-25\",\"sede\":\"0101\"}";
 	//$input = "{\"function\":\"creaFatturaMtx\",\"ddate\":\"2021-01-13\",\"store\":\"0128\",\"reg\":\"002\",\"trans\":\"5041\"}";
 
+	$input = "{\"function\":\"incassiInTempoReale\",\"data\":\"2021-02-05\"}";
 
     $request = json_decode($input, true);
 } else {

@@ -128,6 +128,23 @@ class TIdc extends TTable {
         return '';
     }
 
+	public function incassiInTempoReale(array $request): array {
+    	try {
+		    $stmt = "select store codice, count(*) scontrini, sum(totalamount) importo from mtx.idc where ddate = :ddate and recordcode1=1 and recordtype = 'F' group by 1 with rollup";
+		    $handler = $this->pdo->prepare($stmt);
+
+		    $result = [];
+		    if ($handler->execute([':ddate' => $request['data']])) {
+			    $result = $handler->fetchAll( \PDO::FETCH_ASSOC );
+		    }
+
+		    return $result;
+	    } catch (PDOException $e) {
+		    return [];
+	    }
+
+	}
+
     public function ricerca(array $daCercare): string {
         return '';
     }
