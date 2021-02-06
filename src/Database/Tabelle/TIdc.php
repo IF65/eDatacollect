@@ -497,5 +497,90 @@ class TIdc extends TTable {
             return [];
         }
     }
+
+	public function elencoTransazioniNonChiuse(array $request): array {
+		try {
+			$stmt = "
+				select store, ddate, reg, trans, sum(case when recordtype = 'F' then 1 else 0 end) recCountF, count(*) recCount 
+				from mtx.idc where ddate = :ddate and recordcode1 = 1 and binary recordtype in ('H','F') 
+				group by 1,2,3,4 
+				having recCount <> 2;";
+
+			$handler = $this->pdo->prepare($stmt);
+
+			$result = [];
+			if ($handler->execute([':ddate' => $request['ddate']])) {
+				$result = $handler->fetchAll( \PDO::FETCH_ASSOC );
+			}
+			return $result;
+
+		} catch (PDOException $e) {
+			return '';
+		}
+	}
+
+	public function creazioneTestateScontrinoMancanti(array $request): array {
+		try {
+			$stmt = "
+				select sequencenumber 
+				from mtx.idc 
+				where store = :store and ddate = :ddate and reg = :reg and trans = :trans 
+				order by sequencenumber limit 1";
+			$h_first_transaction_sequencenumber = $this->pdo->prepare($stmt);
+
+			$stmt = "
+				select sequencenumber 
+				from mtx.idc 
+				where store = :store and ddate = :ddate and sequencenumber < :sequencenumber 
+				order by sequencenumber desc limit 1";
+			$h_last_used_sequencenumber = $this->pdo->prepare($stmt);
+
+			$stmt = "
+				insert into mtx.idc
+				select reg, store, ddate, ttime, `hour`, :sequencenumber , trans, transstep - 1 , 'H', '1', '0', '0', 1, '                ', ':00+00000+000000000', 0, 0, 0.00, 0.00, 0.00, 0.00, '', 0.000, 0, '', '', created_at 
+				from mtx.idc 
+				where store = :store and ddate = :ddate and reg = :reg and trans = :trans 
+				order by sequencenumber
+				limit 1;";
+			$h_create_record = $this->pdo->prepare($stmt);
+
+			$result = [];
+			foreach ($request as $transaction) {
+				if ($transaction['recCountF'] == 1 && $transaction['recCount'] == 1) {
+					$h_first_transaction_sequencenumber->execute([
+						':ddate' => $transaction['ddate'],
+						':store' => $transaction['store'],
+						':reg' => $transaction['reg'],
+						':trans' => $transaction['trans']
+					]);
+					$firstTransactionSequenceNumber = ($h_first_transaction_sequencenumber->fetchAll(\PDO::FETCH_COLUMN))[0] * 1;
+
+					$h_last_used_sequencenumber->execute([
+						':ddate' => $transaction['ddate'],
+						':store' => $transaction['store'],
+						':sequencenumber' => $firstTransactionSequenceNumber
+					]);
+					$lastUsedSequenceNumber = ($h_last_used_sequencenumber->fetchAll(\PDO::FETCH_COLUMN))[0] * 1;
+
+					if ($firstTransactionSequenceNumber - $lastUsedSequenceNumber > 1) {
+						$h_create_record->execute([
+							':ddate' => $transaction['ddate'],
+							':store' => $transaction['store'],
+							':reg' => $transaction['reg'],
+							':trans' => $transaction['trans'],
+							':sequencenumber' => $firstTransactionSequenceNumber - 1
+						]);
+					}
+				}
+			}
+
+			return $result;
+
+		} catch (PDOException $e) {
+			return '';
+		}
+	}
+
+
 }
 
