@@ -307,10 +307,18 @@ class TIdc extends TTable {
     public function creazioneDatacollect(array $request): string {
         try {
             if (key_exists( 'data', $request ) && key_exists( 'sede', $request )) {
-                $stmt = "   select *  
-                            from `".$this->schema . "`.`" . $this->tableName. "`
-                            where store = '" . $request['sede'] . "' and ddate = '" . $request['data'] . "'
-                            order by ddate, reg, sequencenumber";
+            	if (key_exists('cassa', $request) && key_exists('transazione', $request)) {
+		            $stmt = "   select *  
+	                            from `" . $this->schema . "`.`" . $this->tableName . "`
+	                            where store = '" . $request['sede'] . "' and ddate = '" . $request['data'] . "' and 
+			                          reg = '" . $request['cassa'] . "' and trans = '" . $request['transazione'] . "'
+	                            order by ddate, reg, sequencenumber";
+	            } else {
+		            $stmt = "   select *  
+	                            from `" . $this->schema . "`.`" . $this->tableName . "`
+	                            where store = '" . $request['sede'] . "' and ddate = '" . $request['data'] . "'
+	                            order by ddate, reg, sequencenumber";
+	            }
                 $handler = $this->pdo->prepare($stmt);
 
                 $dc = [];
