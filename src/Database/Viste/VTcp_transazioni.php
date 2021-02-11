@@ -30,6 +30,8 @@ class VTcp_transazioni
             $tillSearch = " and ts.code >= '041' and ts.code <= '049'";
         } elseif ($request['sede'] == '0201') {
 	        $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
+        } elseif ($request['sede'] == '0155') {
+	        $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
         } else {
             $tillSearch = "";
         }
