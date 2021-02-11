@@ -616,24 +616,26 @@ class VTcp_transazioni
         $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 1 );
 
         $stmt = "SELECT 
-                    case 
-                        when left(sh.code, 4) = '0600' then '0502' 	
-                        when left(sh.code, 4) = '0700' then '0503' 
-                    else 
-	                    left(sh.code, 4) 
-                    end codice,
-                    sum(t.total_amount) importo,
-                    count(*) scontrini
-                FROM TCPOS4.dbo.transactions t 
-                    join TCPOS4.dbo.tills ts on t.till_id = ts.id 
-                    join TCPOS4.dbo.shops sh on t.shop_id = sh.id 
-                where convert(DATE, t.trans_date) = '$data'
-                group by case 
-                        when left(sh.code, 4) = '0600' then '0502' 	
-                        when left(sh.code, 4) = '0700' then '0503' 
-                    else 
-                    	left(sh.code, 4) 
-                    end";
+				    case 
+				        when left(sh.code, 4) = '0600' then '0502' 	
+				        when left(sh.code, 4) = '0700' then '0503' 
+				    else 
+				        left(sh.code, 4) 
+				    end store,
+				    convert(DATE, t.trans_date) ddate,
+				    sum(t.total_amount) totalamount,
+				    count(*) customerCount
+				FROM TCPOS4.dbo.transactions t 
+				    join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+				    join TCPOS4.dbo.shops sh on t.shop_id = sh.id 
+				where convert(DATE, t.trans_date) = '$data'
+				group by case 
+				        when left(sh.code, 4) = '0600' then '0502' 	
+				        when left(sh.code, 4) = '0700' then '0503' 
+				    else 
+				        left(sh.code, 4) 
+				    end,
+    				convert(DATE, t.trans_date)";
 
         $result = [];
         $stmt = $conn->query( $stmt );

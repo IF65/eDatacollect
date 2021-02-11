@@ -152,23 +152,31 @@
 
 	        $tcpos = $this->v_tcp_transazioni->incassiInTempoReale($request);
 	        foreach($tcpos as $row) {
-		        $rows[$row['codice']] = ['codice' => $row['codice'], 'importo' => $row['importo'] * 1, 'scontrini' => $row['scontrini'] * 1];
+		        $index = $row['store'] . $row['ddate'];
+		        $rows[$index] = [
+			        'ddate' => $row['ddate'],
+			        'store' => $row['store'],
+			        'totalamount' => $row['totalamount'] * 1,
+			        'customerCount' => $row['customerCount'] * 1
+		        ];
 	        }
 
 	        $asar = $this->t_idc->incassiInTempoReale($request);
 	        foreach($asar as $row) {
-	        	if (key_exists($row['codice'], $rows)) {
-			        $rows[$row['codice']]['scontrini'] += ($row['scontrini'] * 1);
-			        $rows[$row['codice']]['importo'] += ($row['importo'] * 1);
+	        	$index = $row['store'] . $row['ddate'];
+
+	        	if (key_exists($index, $rows)) {
+			        $rows[$index]['totalamount'] += $row['totalamount'];
+			        $rows[$index]['customerCount'] += $row['customerCount'];
 		        } else {
-			        $rows[$row['codice']] = ['codice' => $row['codice'], 'importo' => $row['importo'] * 1, 'scontrini' => $row['scontrini'] * 1];
+			        $rows[$index] = [
+				        'ddate' => $row['ddate'],
+				        'store' => $row['store'],
+				        'totalamount' => $row['totalamount'] * 1,
+				        'customerCount' => $row['customerCount'] * 1
+			        ];
 		        }
 	        }
-
-	        /*$result = '';
-	        foreach($rows as $row) {
-		        $result .= sprintf('%4s%012d%010d', $row['codice'], round($row['importo'] * 100, 0), $row['scontrini']);
-	        }*/
 
 	        return json_encode($rows);
         }
