@@ -150,10 +150,10 @@
         public function incassiInTempoReale(array $request): string {
             $rows = [];
 
-	        /*$tcpos = $this->v_tcp_transazioni->incassiInTempoReale($request);
+	        $tcpos = $this->v_tcp_transazioni->incassiInTempoReale($request);
 	        foreach($tcpos as $row) {
 		        $rows[$row['codice']] = ['codice' => $row['codice'], 'importo' => $row['importo'] * 1, 'scontrini' => $row['scontrini'] * 1];
-	        }*/
+	        }
 
 	        $asar = $this->t_idc->incassiInTempoReale($request);
 	        foreach($asar as $row) {
@@ -165,12 +165,12 @@
 		        }
 	        }
 
-	        $result = '';
+	        /*$result = '';
 	        foreach($rows as $row) {
 		        $result .= sprintf('%4s%012d%010d', $row['codice'], round($row['importo'] * 100, 0), $row['scontrini']);
-	        }
+	        }*/
 
-	        return $result;
+	        return json_encode($rows);
         }
 
         public function recuperaMTXRigheFatture(array $request): string {
