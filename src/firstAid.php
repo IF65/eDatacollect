@@ -13,6 +13,6 @@ $timeZone = new \DateTimeZone('Europe/Rome');
 
 $db = new Database($sqlDetails);
 
-$result = $db->t_idc->elencoTransazioniNonChiuse(['ddate' => '2021-02-07']);
+$result = $db->t_idc->elencoTransazioniNonChiuse(['ddate' => '2021-02-10']);
 $db->t_idc->creazioneTestateScontrinoMancanti($result);
 print_r($result);
