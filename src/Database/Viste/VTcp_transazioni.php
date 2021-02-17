@@ -201,7 +201,7 @@ class VTcp_transazioni
         } elseif ($request['sede'] == '0503') {
             $tillSearch = " and ts.code >= '041' and ts.code <= '049' and sh.code = '0700' ";
         } else {
-            $tillSearch = "sh.code = '" . $request['sede'] . "' ";
+            $tillSearch = " and sh.code = '" . $request['sede'] . "' ";
         }
 
         $conn = new \PDO("sqlsrv:Server=".$this->hostname.",9089;Database=".$this->dbname, $this->username, $this->password);
