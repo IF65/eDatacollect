@@ -195,13 +195,13 @@ class VTcp_transazioni
         $data = $request['data'];
 
         if ($request['sede'] == '0501') {
-            $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
+            $tillSearch = " and ts.code >= '021' and ts.code <= '029' and sh.code = '0500' ";
         } elseif ($request['sede'] == '0502') {
-            $tillSearch = " and ts.code >= '031' and ts.code <= '039'";
+            $tillSearch = " and ts.code >= '031' and ts.code <= '039' and sh.code = '0600' ";
         } elseif ($request['sede'] == '0503') {
-            $tillSearch = " and ts.code >= '041' and ts.code <= '049'";
+            $tillSearch = " and ts.code >= '041' and ts.code <= '049' and sh.code = '0700' ";
         } else {
-            $tillSearch = "";
+            $tillSearch = "sh.code = '" . $request['sede'] . "' ";
         }
 
         $conn = new \PDO("sqlsrv:Server=".$this->hostname.",9089;Database=".$this->dbname, $this->username, $this->password);
@@ -209,11 +209,12 @@ class VTcp_transazioni
         $conn->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
         $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 1 );
 
-        $stmt = "   select t.id trans_id, convert(varchar, t.trans_date, 126) trans_date, t.total_amount, t.trans_num, ts.code till_code, o.code operator_code, t.card_num
-                    FROM TCPOS4.dbo.transactions t 
-                        join TCPOS4.dbo.tills ts on t.till_id = ts.id 
-                        join TCPOS4.dbo.operators o  on t.operator_id = o.id 
-                    where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null;";
+        $stmt = "	select t.id trans_id, convert(varchar, t.trans_date, 126) trans_date, t.total_amount, t.trans_num, ts.code till_code, o.code operator_code, t.card_num
+					FROM TCPOS4.dbo.transactions t 
+						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+						join TCPOS4.dbo.operators o  on t.operator_id = o.id 
+						join TCPOS4.dbo.shops sh on t.shop_id = sh.id 
+					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null";
 
         $transactions = [];
         $stmt = $conn->query( $stmt );
@@ -285,12 +286,14 @@ class VTcp_transazioni
             }
         }
 
-        $stmt = "   select t.id trans_id, tpc.points_balance, tpc.points_gained, tpc.points_spent, tpc.points_used, pc.code, pc.description 
-                    FROM TCPOS4.dbo.transactions t 
-                        join TCPOS4.dbo.tills ts on t.till_id = ts.id 
-                        join TCPOS4.dbo.trans_point_campaigns tpc on t.id = tpc.transaction_id 
-                        join TCPOS4.dbo.point_campaigns pc on tpc.point_campaign_id =pc.id 
-                    where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null;";
+        $stmt = "	select t.id trans_id, tpc.points_balance, tpc.points_gained, tpc.points_spent, tpc.points_used, pc.code, pc.description 
+					FROM TCPOS4.dbo.transactions t 
+						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+						join TCPOS4.dbo.trans_point_campaigns tpc on t.id = tpc.transaction_id 
+						join TCPOS4.dbo.point_campaigns pc on tpc.point_campaign_id =pc.id 
+						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
+					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null;
+					";
         $stmt = $conn->query( $stmt );
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
             $trans_id = $row['trans_id'];
