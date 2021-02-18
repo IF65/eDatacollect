@@ -45,14 +45,14 @@ class VTcp_transazioni
                     FROM TCPOS4.dbo.transactions t 
                         join TCPOS4.dbo.tills ts on t.till_id = ts.id 
                         join TCPOS4.dbo.shops sh on t.shop_id = sh.id 
-                    where convert(DATE, t.trans_date) = '$data' $tillSearch
+                    where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
                     group by convert(DATE, t.trans_date), case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) + '0' + right(ts.code,2)
                     UNION 
                     SELECT 'H' tipo, case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) id, replace(CONVERT(VARCHAR(8),max(t.trans_date),108),':','')  codice, 0 s1, 0 s2
                     FROM TCPOS4.dbo.transactions t 
                         join TCPOS4.dbo.tills ts on t.till_id = ts.id 
                         join TCPOS4.dbo.shops sh on t.shop_id = sh.id 
-                    where convert(DATE, t.trans_date) = '$data' $tillSearch
+                    where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
                     group by case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112)
                     union
                     SELECT 'T' tipo, case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) + '0' + right(ts.code,2) id, 
@@ -70,7 +70,7 @@ class VTcp_transazioni
                         join TCPOS4.dbo.tills ts on t.till_id = ts.id 
                         join TCPOS4.dbo.shops sh on t.shop_id = sh.id
                         join TCPOS4.dbo.trans_payments pay on t.id = pay.transaction_id 
-                    where pay.credit_card_id is null and pay.voucher_id is null and convert(DATE, t.trans_date) = '$data' $tillSearch
+                    where pay.credit_card_id is null and pay.voucher_id is null and convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
                     group by case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) + '0' + right(ts.code,2), 
                              case 
                                 when pay.payment_id = 1 then '01'
@@ -89,7 +89,7 @@ class VTcp_transazioni
                     join TCPOS4.dbo.shops sh on t.shop_id = sh.id
                     join TCPOS4.dbo.trans_payments tp on tp.transaction_id =t.id 
                     join TCPOS4.dbo.credit_cards cc on tp.credit_card_id =cc.id 
-                where convert(DATE, t.trans_date) = '$data' $tillSearch
+                where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
                 group by case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) + '0' + right(ts.code,2), cc.card_number_ident
                 union
                 SELECT 'T' tipo, case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) + '0' + right(ts.code,2) id, 4 codice, sum(pay.amount) s1, 0 s2
@@ -97,7 +97,7 @@ class VTcp_transazioni
                     join TCPOS4.dbo.tills ts on t.till_id = ts.id 
                     join TCPOS4.dbo.shops sh on t.shop_id = sh.id
                     join TCPOS4.dbo.trans_payments pay on t.id = pay.transaction_id 
-                where pay.voucher_id is not null and convert(DATE, t.trans_date) = '$data' $tillSearch
+                where pay.voucher_id is not null and convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
                 group by case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) + '0' + right(ts.code,2)
                 union
                 select 'V' tipo, 
@@ -110,7 +110,7 @@ class VTcp_transazioni
                     join TCPOS4.dbo.tills ts on t.till_id = ts.id 
                     join TCPOS4.dbo.shops sh on t.shop_id = sh.id
                     join TCPOS4.dbo.trans_vats tv on t.id = tv.transaction_id 
-                where convert(DATE, t.trans_date) = '$data' $tillSearch
+                where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
                 group by case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) + '0' + right(ts.code,2), isnull(case when tv.vat_id = 1 then 2 when  tv.vat_id = 4 then 1 else tv.vat_id end, 2)
                 UNION
                 SELECT 
@@ -123,14 +123,14 @@ class VTcp_transazioni
                     join TCPOS4.dbo.tills ts on s.id =ts.shop_id
                     join TCPOS4.dbo.closings c on c.till_id = ts.id
                     join TCPOS4.dbo.drawer_counts dc on c.id =dc.closing_id 
-                where convert(DATE, c.opening_date ) = '$data' $tillSearch
+                where convert(DATE, c.opening_date ) = '$data' $tillSearch 
                 group BY case when left(s.code, 4) = '0600' then '0502' when left(s.code, 4) = '0700' then '0503' else left(s.code, 4) end + convert(varchar(8), c.opening_date, 112) + '0' + right(ts.code,2) 
                 union 
                 SELECT 'I' tipo, case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) id, ts.code codice, count(*) s1, sum(t.total_amount) s2
                 FROM TCPOS4.dbo.transactions t 
                     join TCPOS4.dbo.tills ts on t.till_id = ts.id 
                     join TCPOS4.dbo.shops sh on t.shop_id = sh.id
-                where convert(DATE, t.trans_date ) = '$data' $tillSearch
+                where convert(DATE, t.trans_date ) = '$data' $tillSearch and t.delete_timestamp is null
                 group by case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2), ts.code
                 UNION
                 SELECT 
@@ -156,7 +156,7 @@ class VTcp_transazioni
                     join TCPOS4.dbo.shops sh on t.shop_id = sh.id
                     join TCPOS4.dbo.trans_articles ta on t.id = ta.transaction_id 
                     join TCPOS4.dbo.articles a on a.id = ta.article_id 
-                where ta.delete_timestamp is NULL and convert(DATE, t.trans_date ) = '$data' $tillSearch
+                where ta.delete_timestamp is NULL and convert(DATE, t.trans_date ) = '$data' $tillSearch and t.delete_timestamp is null
                 group by 
 	                case 
                         when left(sh.code, 4) = '0600' then '0502' 
@@ -235,6 +235,7 @@ class VTcp_transazioni
                     /*ta.owner_hash_code,
                     ta.addition_article_hash_code,
                     ta.supplement_menu_hash_code,*/ 
+       				ta.promotion_discount,
                     ta.qty_weight quantity, 
                     ta.vat_percent,
                     v.code vat_code,
