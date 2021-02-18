@@ -235,7 +235,7 @@ class VTcp_transazioni
                     /*ta.owner_hash_code,
                     ta.addition_article_hash_code,
                     ta.supplement_menu_hash_code,*/ 
-       				ta.promotion_discount,
+       				coalesce(ta.promotion_discount,0) as promotion_discount,
                     ta.qty_weight quantity, 
                     ta.vat_percent,
                     v.code vat_code,
