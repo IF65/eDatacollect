@@ -13,10 +13,10 @@ $timeZone = new \DateTimeZone('Europe/Rome');
 
 if ($debug) {
     //$input = "{\"function\":\"recuperaMTXRigheFatture\",\"ddate\":\"2021-01-03\",\"store\":\"0101\",\"reg\":\"001\",\"trans\":\"6228\"}";
-    $input = "{\"function\":\"creazioneDatacollectTcPos\",\"data\":\"2021-01-30\",\"sede\":\"0501\"}";
+    //$input = "{\"function\":\"creazioneDatacollectTcPos\",\"data\":\"2021-01-30\",\"sede\":\"0501\"}";
     //$input = "{\"function\":\"recuperaDatiPerQuadratura\",\"data\":\"2021-01-31\",\"sede\":\"0138\"}";
     //$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-02-17\",\"sede\":\"0155\",\"cassa\":\"052\",\"transazione\":\"0309\"}";
-	//$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-02-17\",\"sede\":\"0155\"}";
+	$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-03-16\",\"sede\":\"3689\"}";
     //$input = "{\"function\":\"recuperaFatture\"}";
     //$input = "{\"function\":\"creaFileInterscambioFatture\"}";
     //$input = "{\"function\":\"creazioneDatacollectRiepvegiTxt\",\"data\":\"2020-09-06\",\"sede\":\"0501\"}";

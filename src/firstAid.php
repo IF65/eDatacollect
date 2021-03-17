@@ -13,6 +13,11 @@ $timeZone = new \DateTimeZone('Europe/Rome');
 
 $db = new Database($sqlDetails);
 
-$result = $db->t_idc->elencoTransazioniNonChiuse(['ddate' => '2021-02-16']);
+$currentDate = new DateTime();
+
+//$date = $currentDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+$date = $currentDate->format('Y-m-d');
+
+$result = $db->t_idc->elencoTransazioniNonChiuse(['ddate' => $date]);
 $db->t_idc->creazioneTestateScontrinoMancanti($result);
 print_r($result);
