@@ -357,7 +357,7 @@ class VTcp_transazioni
 	    }
 
 
-	    $stmt = "select t.id trans_id, tv.vat_id, tv.vat_percent, tv.gross_amount, tv.net_amount, tv.vat_amount 
+	    $stmt = "select t.id trans_id, case when tv.id = 1 then 7 when tv.id = 4 then 1 else tv.id end vat_code, tv.vat_percent, tv.gross_amount, tv.net_amount, tv.vat_amount 
 				FROM TCPOS4.dbo.transactions t 
 					join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 					join TCPOS4.dbo.shops sh on t.shop_id =sh.id
