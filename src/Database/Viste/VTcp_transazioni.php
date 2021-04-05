@@ -305,7 +305,7 @@ class VTcp_transazioni
         }
 
         $stmt = "select * from (
-					select t.id trans_id, '4' payment_type, cc.card_number_ident payment_code,tp.amount payment_amount
+					select t.id trans_id, '4' payment_type, cc.card_number_ident payment_code,tp.amount payment_amount, tp.credit_card_num 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id
@@ -325,14 +325,15 @@ class VTcp_transazioni
 					    else 
 					        '00'
 					    end payment_code,
-						tp.amount payment_amount
+						tp.amount payment_amount,
+					    '' credit_card_num
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id
 						join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
 					where tp.credit_card_id is null and tp.voucher_id is null and convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
 					union
-					SELECT t.id trans_id, '1' payment_type, '04' payment_code, tp.amount payment_amount
+					SELECT t.id trans_id, '1' payment_type, '04' payment_code, tp.amount payment_amount, '' credit_card_num
 					FROM TCPOS4.dbo.transactions t 
 					    join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 					    join TCPOS4.dbo.shops sh on t.shop_id = sh.id
