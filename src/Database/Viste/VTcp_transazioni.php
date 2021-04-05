@@ -238,7 +238,7 @@ class VTcp_transazioni
        				coalesce(ta.promotion_discount,0) as promotion_discount,
                     ta.qty_weight quantity, 
                     ta.vat_percent,
-                    v.code vat_code,
+                    case when v.id = 1 then 7 when v.id = 4 then 1 else v.id end vat_code,
                     ta.price article_price, 
                     coalesce(ta.discount,0) discount,
                     mnu.addition_menu_hash_code hash_code_menu_addition,
