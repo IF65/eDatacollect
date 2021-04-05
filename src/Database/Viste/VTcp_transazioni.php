@@ -304,6 +304,58 @@ class VTcp_transazioni
             }
         }
 
+        $stmt = "select * from (
+					select t.id trans_id, cc.card_number_ident payment_code,tp.amount 
+					FROM TCPOS4.dbo.transactions t 
+						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+						join TCPOS4.dbo.shops sh on t.shop_id =sh.id
+						join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
+						join TCPOS4.dbo.credit_cards cc on tp.credit_card_id =cc.id 
+					where tp.credit_card_id is not null and convert(DATE, t.trans_date) = '2021-04-03'  and ts.code >= '021' and ts.code <= '029' and t.delete_timestamp is null
+					union
+					select t.id trans_id,
+						case 
+					        when tp.payment_id = 1 then '01'
+					        when tp.payment_id = 5 then '04'
+					        when tp.payment_id = 10 then '08'
+					        when tp.payment_id = 11 then '05'
+					        when tp.payment_id = 12 then '08'
+					        when tp.payment_id = 13 then '01'
+					    else 
+					        '00'
+					    end payment_code,
+						tp.amount
+					FROM TCPOS4.dbo.transactions t 
+						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+						join TCPOS4.dbo.shops sh on t.shop_id =sh.id
+						join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
+					where tp.credit_card_id is null and tp.voucher_id is null and convert(DATE, t.trans_date) = '2021-04-03'  and ts.code >= '021' and ts.code <= '029' and t.delete_timestamp is null
+					union
+					SELECT t.id trans_id, '04' payment_code, tp.amount
+					FROM TCPOS4.dbo.transactions t 
+					    join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+					    join TCPOS4.dbo.shops sh on t.shop_id = sh.id
+					    join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
+					where tp.voucher_id is not null and convert(DATE, t.trans_date) = '2021-01-03'  and ts.code >= '021' and ts.code <= '029' and t.delete_timestamp is null
+    			) as a
+				order by a.trans_id, a.payment_code";
+
+	    $stmt = $conn->query( $stmt );
+	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
+		    $trans_id = $row['trans_id'];
+		    if (key_exists($trans_id, $transactions)) {
+			    $payments = [];
+			    if (key_exists('payments', $transactions[$trans_id])) {
+				    $payments = $transactions[$trans_id]['payments'];
+			    }
+			    unset($row['trans_id']);
+
+			    $payments[] = $row;
+
+			    $transactions[$trans_id]['payments'] = $payments;
+		    }
+	    }
+
         foreach ($transactions as $transaction_key => $transaction) {
             $additions = [];
             foreach ($transaction['articles'] as $article) {
