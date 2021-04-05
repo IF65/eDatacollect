@@ -311,7 +311,7 @@ class VTcp_transazioni
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id
 						join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
 						join TCPOS4.dbo.credit_cards cc on tp.credit_card_id =cc.id 
-					where tp.credit_card_id is not null and convert(DATE, t.trans_date) = '2021-04-03'  and ts.code >= '021' and ts.code <= '029' and t.delete_timestamp is null
+					where tp.credit_card_id is not null and convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
 					union
 					select t.id trans_id,
 						case 
@@ -329,14 +329,14 @@ class VTcp_transazioni
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id
 						join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
-					where tp.credit_card_id is null and tp.voucher_id is null and convert(DATE, t.trans_date) = '2021-04-03'  and ts.code >= '021' and ts.code <= '029' and t.delete_timestamp is null
+					where tp.credit_card_id is null and tp.voucher_id is null and convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
 					union
 					SELECT t.id trans_id, '04' payment_code, tp.amount
 					FROM TCPOS4.dbo.transactions t 
 					    join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 					    join TCPOS4.dbo.shops sh on t.shop_id = sh.id
 					    join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
-					where tp.voucher_id is not null and convert(DATE, t.trans_date) = '2021-01-03'  and ts.code >= '021' and ts.code <= '029' and t.delete_timestamp is null
+					where tp.voucher_id is not null and convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
     			) as a
 				order by a.trans_id, a.payment_code";
 
@@ -353,6 +353,31 @@ class VTcp_transazioni
 			    $payments[] = $row;
 
 			    $transactions[$trans_id]['payments'] = $payments;
+		    }
+	    }
+
+
+	    $stmt = "select t.id trans_id, tv.vat_id, tv.vat_percent, tv.gross_amount, tv.net_amount, tv.vat_amount 
+				FROM TCPOS4.dbo.transactions t 
+					join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+					join TCPOS4.dbo.shops sh on t.shop_id =sh.id
+					join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
+					join TCPOS4.dbo.trans_vats tv on t.id = tv.transaction_id 
+				where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null";
+
+	    $stmt = $conn->query( $stmt );
+	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
+		    $trans_id = $row['trans_id'];
+		    if (key_exists($trans_id, $transactions)) {
+			    $transaction_vat = [];
+			    if (key_exists('transaction_vat', $transactions[$trans_id])) {
+				    $transaction_vat = $transactions[$trans_id]['transaction_vat'];
+			    }
+			    unset($row['trans_id']);
+
+			    $transaction_vat[] = $row;
+
+			    $transactions[$trans_id]['transaction_vat'] = $transaction_vat;
 		    }
 	    }
 
