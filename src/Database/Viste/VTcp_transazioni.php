@@ -39,7 +39,7 @@ class VTcp_transazioni
         $conn = new \PDO("sqlsrv:Server=".$this->hostname.",9089;Database=".$this->dbname, $this->username, $this->password);
 
         $conn->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
-        $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 1 );
+        $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10 );
 
         $stmt = "   SELECT 'F' tipo, case when left(sh.code, 4) = '0600' then '0502' when left(sh.code, 4) = '0700' then '0503' else left(sh.code, 4) end + convert(varchar(8), t.trans_date, 112) + '0' + right(ts.code,2) + '0' + right(ts.code,2) id, '' codice, count(*) s1, sum(t.total_amount) s2
                     FROM TCPOS4.dbo.transactions t 
@@ -207,7 +207,7 @@ class VTcp_transazioni
         $conn = new \PDO("sqlsrv:Server=".$this->hostname.",9089;Database=".$this->dbname, $this->username, $this->password);
 
         $conn->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
-        $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 1 );
+        $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10 );
 
         $stmt = "	select t.id trans_id, convert(varchar, t.trans_date, 126) trans_date, t.total_amount, t.trans_num, ts.code till_code, o.code operator_code, t.card_num
 					FROM TCPOS4.dbo.transactions t 
@@ -696,7 +696,7 @@ class VTcp_transazioni
         $conn = new \PDO("sqlsrv:Server=".$this->hostname.",9089;Database=".$this->dbname, $this->username, $this->password);
 
         $conn->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
-        $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 1 );
+        $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10 );
 
         $stmt = "SELECT 
 				    case 
@@ -734,7 +734,7 @@ class VTcp_transazioni
             $conn = new \PDO( "sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname, $this->username, $this->password );
 
             $conn->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
-            $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 1 );
+            $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10 );
 
             $conn->query( "update TCPOS4.dbo.transactions set exported = 10 where fiscal_invoice is not NULL and exported = 0;" );
 
@@ -1042,7 +1042,7 @@ class VTcp_transazioni
         $conn = new \PDO("sqlsrv:Server=".$this->hostname.",9089;Database=".$this->dbname, $this->username, $this->password);
 
         $conn->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
-        $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 1 );
+        $conn->setAttribute( \PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10 );
 
         $conn->query( "update TCPOS4.dbo.transactions set exported = 0 where fiscal_invoice is not NULL and exported is NULL;" );
 
