@@ -312,7 +312,7 @@ class VTcp_transazioni
 						join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
 						join TCPOS4.dbo.credit_cards cc on tp.credit_card_id =cc.id 
 					where tp.credit_card_id is not null and convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
-					union
+					union all
 					select t.id trans_id,
 					    '0' payment_type,
 						case 
@@ -332,7 +332,7 @@ class VTcp_transazioni
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id
 						join TCPOS4.dbo.trans_payments tp on t.id = tp.transaction_id 
 					where tp.credit_card_id is null and tp.voucher_id is null and convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
-					union
+					union all
 					SELECT t.id trans_id, '1' payment_type, '04' payment_code, tp.amount payment_amount, '' credit_card_num
 					FROM TCPOS4.dbo.transactions t 
 					    join TCPOS4.dbo.tills ts on t.till_id = ts.id 
