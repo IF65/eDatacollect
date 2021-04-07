@@ -252,7 +252,7 @@ class VTcp_transazioni
                     join TCPOS4.dbo.shops sh on t.shop_id = sh.id
                     join TCPOS4.dbo.trans_articles ta on t.id = ta.transaction_id 
                     join TCPOS4.dbo.articles a on a.id = ta.article_id 
-                    join TCPOS4.dbo.vats v on v.id = ta.vat_id 
+                    left join TCPOS4.dbo.vats v on v.id = ta.vat_id 
                     left join menus m2 on m2.id = ta.menu_id 
                     left join (
                         select addition_menu_hash_code, price, price_sum_for_addition 
