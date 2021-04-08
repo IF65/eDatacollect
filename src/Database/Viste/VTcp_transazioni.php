@@ -270,7 +270,7 @@ class VTcp_transazioni
                             ) as b on a.addition_menu_hash_code = b.owner_hash_code
                     ) mnu on mnu.addition_menu_hash_code = ta.owner_hash_code
                 where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_menu_hash_code is null and 
-                t.delete_timestamp is null and ta.delete_timestamp is null;";
+                t.delete_timestamp is null and ta.delete_timestamp is null and ta.delete_operator_id is null;";
 
         $stmt = $conn->query( $stmt );
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
