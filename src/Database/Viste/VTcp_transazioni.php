@@ -260,7 +260,7 @@ class VTcp_transazioni
                         select addition_menu_hash_code, price, price_sum_for_addition 
                         from
                             (	
-                                select ta.addition_menu_hash_code, ta.price 
+                                select ta.transaction_id, ta.addition_menu_hash_code, ta.price 
                                 from TCPOS4.dbo.trans_articles ta 
                                 where ta.addition_menu_hash_code is not null 
                             ) as a join (
@@ -269,7 +269,7 @@ class VTcp_transazioni
                                 where ta.addition_menu_hash_code is null 
                                 group by ta.owner_hash_code
                             ) as b on a.addition_menu_hash_code = b.owner_hash_code
-                    ) mnu on mnu.addition_menu_hash_code = ta.owner_hash_code
+                    ) mnu on mnu.addition_menu_hash_code = ta.owner_hash_code and t.id = mnu.transaction_id
                 where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_menu_hash_code is null and 
                 t.delete_timestamp is null and ta.delete_timestamp is null and ta.delete_operator_id is null;";
 
