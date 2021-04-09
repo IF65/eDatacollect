@@ -227,51 +227,76 @@ class VTcp_transazioni
 	        $transactions[$trans_id]['round'] = 0;
         }
 
-        $stmt = "SELECT 
-                    t.id trans_id, 
-                    '' article_barcode,
-                    a.code article_code, 
-                    a.description, 
-                    ta.hash_code,
-                    /*ta.owner_hash_code,
-                    ta.addition_article_hash_code,
-                    ta.supplement_menu_hash_code,*/ 
-       				coalesce(ta.promotion_discount,0) as promotion_discount,
-                    ta.qty_weight quantity, 
-                    ta.vat_percent,
-                    case when v.id = 1 then 7 when v.id = 4 then 1 else v.id end vat_code,
-                    ta.price article_price, 
-                    coalesce(ta.discount,0) discount,
-       				coalesce(ta.promotion_discount ,0) promotion_discount,
-                    mnu.addition_menu_hash_code hash_code_menu_addition,
-                    coalesce(mnu.price,0) as price_total_menu_addition,
-                    case when coalesce(mnu.price_sum_for_addition,0) <> 0 then round(coalesce(mnu.price,0) * ta.price / coalesce(mnu.price_sum_for_addition,0),2) else 0 end price_article_menu_addition,
-                    coalesce(ta.pricelevel_unit_price, ta.price) article_catalog_price_unit,
-                    ta.menu_id,
-                    m2.description menu_description
-                FROM TCPOS4.dbo.transactions t 
-                    join TCPOS4.dbo.tills ts on t.till_id = ts.id 
-                    join TCPOS4.dbo.shops sh on t.shop_id = sh.id
-                    join TCPOS4.dbo.trans_articles ta on t.id = ta.transaction_id 
-                    join TCPOS4.dbo.articles a on a.id = ta.article_id 
-                    left join TCPOS4.dbo.vats v on v.id = ta.vat_id 
-                    left join menus m2 on m2.id = ta.menu_id 
-                    left join (
-                        select transaction_id, addition_menu_hash_code, price, price_sum_for_addition 
-                        from
-                            (	
-                                select ta.transaction_id, ta.addition_menu_hash_code, ta.price 
-                                from TCPOS4.dbo.trans_articles ta 
-                                where ta.addition_menu_hash_code is not null 
-                            ) as a join (
-                                select ta.owner_hash_code, sum(ta.price) price_sum_for_addition
-                                from TCPOS4.dbo.trans_articles ta 
-                                where ta.addition_menu_hash_code is null 
-                                group by ta.owner_hash_code
-                            ) as b on a.addition_menu_hash_code = b.owner_hash_code
-                    ) mnu on mnu.addition_menu_hash_code = ta.owner_hash_code and t.id = mnu.transaction_id
-                where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_menu_hash_code is null and 
-                t.delete_timestamp is null and ta.delete_timestamp is null and ta.delete_operator_id is null;";
+        $stmt = "	select 
+						a.trans_id, 
+					    a.article_barcode,
+					    a.article_code, 
+					    a.description, 
+					    a.hash_code,
+					    a.hash_code_menu_addition,
+					    min(a.menu_id) menu_id,
+					    min(a.vat_percent) vat_percent,
+					    min(a.vat_code) vat_code,
+					    min(a.article_price) article_price,
+					    min(a.article_catalog_price_unit) article_catalog_price_unit,
+					    sum(a.promotion_discount) promotion_discount,
+					    sum(a.quantity) quantity, 
+					    sum(a.discount) discount,
+					    sum(a.price_total_menu_addition) price_total_menu_addition,
+					    sum(a.price_article_menu_addition) price_article_menu_addition
+					from (
+							SELECT 
+		                    t.id trans_id, 
+		                    '' article_barcode,
+		                    a.code article_code, 
+		                    a.description, 
+		                    ta.hash_code,
+		                    /*ta.owner_hash_code,
+		                    ta.addition_article_hash_code,
+		                    ta.supplement_menu_hash_code,*/ 
+		                    coalesce(ta.promotion_discount,0) as promotion_discount,
+		                    ta.qty_weight quantity, 
+		                    ta.vat_percent,
+		                    case when v.id = 1 then 7 when v.id = 4 then 1 else v.id end vat_code,
+		                    ta.price article_price, 
+		                    coalesce(ta.discount,0) discount,
+		                    coalesce(ta.promotion_discount ,0) promotion_discount,
+		                    mnu.addition_menu_hash_code hash_code_menu_addition,
+		                    coalesce(mnu.price,0) as price_total_menu_addition,
+		                    case when coalesce(mnu.price_sum_for_addition,0) <> 0 then round(coalesce(mnu.price,0) * ta.price / coalesce(mnu.price_sum_for_addition,0),2) else 0 end price_article_menu_addition,
+		                    coalesce(ta.pricelevel_unit_price, ta.price) article_catalog_price_unit,
+		                    ta.menu_id,
+		                    m2.description menu_description
+		                FROM TCPOS4.dbo.transactions t 
+		                    join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+		                    join TCPOS4.dbo.shops sh on t.shop_id = sh.id
+		                    join TCPOS4.dbo.trans_articles ta on t.id = ta.transaction_id 
+		                    join TCPOS4.dbo.articles a on a.id = ta.article_id 
+		                    left join TCPOS4.dbo.vats v on v.id = ta.vat_id 
+		                    left join menus m2 on m2.id = ta.menu_id 
+		                    left join (
+		                        select transaction_id, addition_menu_hash_code, price, price_sum_for_addition 
+		                        from
+		                            (	
+		                                select ta.transaction_id, ta.addition_menu_hash_code, ta.price 
+		                                from TCPOS4.dbo.trans_articles ta 
+		                                where ta.addition_menu_hash_code is not null 
+		                            ) as a join (
+		                                select ta.owner_hash_code, sum(ta.price) price_sum_for_addition
+		                                from TCPOS4.dbo.trans_articles ta 
+		                                where ta.addition_menu_hash_code is null 
+		                                group by ta.owner_hash_code
+		                            ) as b on a.addition_menu_hash_code = b.owner_hash_code
+		                    ) mnu on mnu.addition_menu_hash_code = ta.owner_hash_code and t.id = mnu.transaction_id
+		                where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_menu_hash_code is null and 
+		                t.delete_timestamp is null and ta.delete_timestamp is null and ta.delete_operator_id is null
+					) as a
+					group by a.trans_id, 
+					    a.article_barcode,
+					    a.article_code, 
+					    a.description, 
+					    a.hash_code,
+					    a.hash_code_menu_addition;";
 
         $stmt = $conn->query( $stmt );
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
