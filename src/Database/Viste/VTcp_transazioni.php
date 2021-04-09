@@ -260,7 +260,6 @@ class VTcp_transazioni
 		                    case when v.id = 1 then 7 when v.id = 4 then 1 else v.id end vat_code,
 		                    ta.price article_price, 
 		                    coalesce(ta.discount,0) discount,
-		                    coalesce(ta.promotion_discount ,0) promotion_discount,
 		                    mnu.addition_menu_hash_code hash_code_menu_addition,
 		                    coalesce(mnu.price,0) as price_total_menu_addition,
 		                    case when coalesce(mnu.price_sum_for_addition,0) <> 0 then round(coalesce(mnu.price,0) * ta.price / coalesce(mnu.price_sum_for_addition,0),2) else 0 end price_article_menu_addition,
