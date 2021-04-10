@@ -268,6 +268,7 @@ class VTcp_transazioni
             }
         }
 
+        // aggancio gli addition
         $stmt = "select 
 					ta.transaction_id trans_id,
 					ta.price, 
@@ -289,6 +290,22 @@ class VTcp_transazioni
 				    }
 			    }
 		    }
+	    }
+
+	    //calcolo i menu
+	    $menus = [];
+	    foreach($transactions as $trans_id => $transaction) {
+		    foreach($transaction['articles'] as $article) {
+				$owner_hash_code = $article['owner_hash_code'];
+				if ($owner_hash_code != '') {
+					if (!key_exists($owner_hash_code, $menus)) {
+						$menus[$owner_hash_code] = ['id' => $article['menu_id'], 'price' => 0, 'articles' => []];
+					}
+					$menus[$owner_hash_code]['price'] += $article['pricelevel_unit_price'] - $article['price'];
+					$menus[$owner_hash_code]['articles'][] = $article['hash_code'];
+				}
+		    }
+		    $transactions[$trans_id]['menus'] = $menus;
 	    }
 
 	    $stmt = "	select t.id trans_id, sum(td.amount) amount 
