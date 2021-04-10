@@ -285,6 +285,7 @@ class VTcp_transazioni
 			    foreach($transactions[$trans_id]['articles']  as $id => $article) {
 			    	if ($article['hash_code'] == $row['addition_article_hash_code']) {
 			    		$article['addition_article_price'] += $row['price'];
+					    $transactions[$trans_id]['articles'][$id] = $article;
 				    }
 			    }
 		    }
