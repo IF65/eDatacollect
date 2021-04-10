@@ -246,7 +246,9 @@ class VTcp_transazioni
 	       				0 addition_article_price 
 					from transactions t 
 						join trans_articles ta on t.id = ta.transaction_id 
-						join articles a on a.id = ta.article_id 
+						join articles a on a.id = ta.article_id
+						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_article_hash_code is null and 
 					      ta.addition_menu_hash_code is null and t.delete_timestamp is null and ta.delete_timestamp is null and 
 					      ta.delete_operator_id is null;";
@@ -274,7 +276,9 @@ class VTcp_transazioni
 					ta.addition_menu_hash_code 
 				from transactions t 
 					join trans_articles ta on t.id = ta.transaction_id 
-				where t.id = 547 and  (ta.addition_article_hash_code is not null or ta.addition_menu_hash_code is not null);";
+					join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+					join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
+				where convert(DATE, t.trans_date) = '$data' $tillSearch and  (ta.addition_article_hash_code is not null or ta.addition_menu_hash_code is not null);";
 	    $stmt = $conn->query( $stmt );
 	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
 		    $trans_id = $row['trans_id'];
