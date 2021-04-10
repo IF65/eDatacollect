@@ -300,7 +300,7 @@ class VTcp_transazioni
 					if (!key_exists($owner_hash_code, $menus)) {
 						$menus[$owner_hash_code] = ['id' => $article['menu_id'], 'price' => 0, 'articles' => []];
 					}
-					$menus[$owner_hash_code]['price'] += round($article['pricelevel_unit_price'] - $article['price'],2);
+					$menus[$owner_hash_code]['price'] += round(round($article['pricelevel_unit_price'] * $article['qty_weight'], 2) - $article['price'],2);
 					$menus[$owner_hash_code]['articles'][] = $hash_code;
 				}
 		    }
