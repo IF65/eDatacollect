@@ -224,7 +224,6 @@ class VTcp_transazioni
             $transactions[$trans_id] = $row;
             $transactions[$trans_id]['articles'] = [];
             $transactions[$trans_id]['points'] = [];
-	        $transactions[$trans_id]['menu'] = [];
 	        $transactions[$trans_id]['round'] = 0;
         }
 
@@ -283,7 +282,11 @@ class VTcp_transazioni
 	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
 		    $trans_id = $row['trans_id'];
 		    if (key_exists($trans_id, $transactions)) {
-			    $transactions[$trans_id]['menu'] = $row;
+			    foreach($transactions[$trans_id]['articles']  as $id => $article) {
+			    	if ($article['hash_code'] == $row['addition_article_hash_code']) {
+			    		$article['addition_article_price'] += $row['price'];
+				    }
+			    }
 		    }
 	    }
 
