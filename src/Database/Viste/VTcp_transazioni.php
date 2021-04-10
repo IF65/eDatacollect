@@ -284,8 +284,8 @@ class VTcp_transazioni
 		    $trans_id = $row['trans_id'];
 		    if (key_exists($trans_id, $transactions)) {
 		    	if (key_exists($row['addition_article_hash_code'], $transactions[$trans_id]['articles'])) {
-				    $transactions[$trans_id]['articles'][$row['addition_article_hash_code']] =
-					    round($transactions[$trans_id]['articles'][$row['addition_article_hash_code']] + $row['price'],2);
+				    $transactions[$trans_id]['articles'][$row['addition_article_hash_code']]['addition_article_price'] =
+					    round($transactions[$trans_id]['articles'][$row['addition_article_hash_code']]['addition_article_price'] + $row['price'],2);
 			    }
 		    }
 	    }
