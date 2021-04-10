@@ -293,8 +293,8 @@ class VTcp_transazioni
 	    }
 
 	    //calcolo i menu
-	    $menus = [];
 	    foreach($transactions as $trans_id => $transaction) {
+		    $menus = [];
 		    foreach($transaction['articles'] as $article) {
 				$owner_hash_code = $article['owner_hash_code'];
 				if ($owner_hash_code != '') {
