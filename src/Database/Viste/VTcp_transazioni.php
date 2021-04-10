@@ -270,7 +270,7 @@ class VTcp_transazioni
         }
 
         $stmt = "select 
-					ta.transaction_id,
+					ta.transaction_id trans_id,
 					ta.price, 
 					ta.addition_article_hash_code,
 					ta.addition_menu_hash_code 
