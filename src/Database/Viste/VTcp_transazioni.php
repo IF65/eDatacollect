@@ -399,39 +399,6 @@ class VTcp_transazioni
 		    }
 	    }
 
-        foreach ($transactions as $transaction_key => $transaction) {
-            $additions = [];
-            foreach ($transaction['articles'] as $article) {
-                if ($article['hash_code_menu_addition'] != null) {
-                    if (key_exists($article['hash_code_menu_addition'], $additions)) {
-                        $additions[$article['hash_code_menu_addition']]['parts'] += $article['price_article_menu_addition'];
-                        if ($additions[$article['hash_code_menu_addition']]['max_price'] < $article['article_price'] ) {
-                            $additions[$article['hash_code_menu_addition']]['max_price'] = $article['article_price'];
-                            $additions[$article['hash_code_menu_addition']]['max_hash_code'] = $article['hash_code'];
-                        }
-                    } else {
-                        $additions[$article['hash_code_menu_addition']] = [
-                            'total' => $article['price_total_menu_addition'],
-                            'parts' => $article['price_article_menu_addition'],
-                            'max_price' => $article['article_price'],
-                            'max_hash_code' => $article['hash_code'],
-                        ];
-                    }
-                }
-            }
-
-            foreach ($additions as $addition) {
-                if ($addition['total'] != $addition['parts']) {
-                    foreach ($transaction['articles'] as $article_key => $article) {
-                        if ($addition['max_hash_code'] == $article['hash_code']) {
-                            $value = $transactions[$transaction_key]['articles'][$article_key]['price_article_menu_addition'] + $addition['total'] - $addition['parts'];
-                            $transactions[$transaction_key]['articles'][$article_key]['price_article_menu_addition'] = sprintf("%.2f",$value);
-                        }
-                    }
-                }
-            }
-        }
-
         return json_encode($transactions);
     }
 
