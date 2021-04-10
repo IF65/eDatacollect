@@ -278,7 +278,8 @@ class VTcp_transazioni
 					join trans_articles ta on t.id = ta.transaction_id 
 					join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 					join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
-				where convert(DATE, t.trans_date) = '$data' $tillSearch and  (ta.addition_article_hash_code is not null or ta.addition_menu_hash_code is not null);";
+				where convert(DATE, t.trans_date) = '$data' $tillSearch and  (ta.addition_article_hash_code is not null or ta.addition_menu_hash_code is not null) and 
+				      t.delete_timestamp is null and ta.delete_timestamp is null and ta.delete_operator_id is null;";
 	    $stmt = $conn->query( $stmt );
 	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
 		    $trans_id = $row['trans_id'];
