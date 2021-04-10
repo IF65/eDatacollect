@@ -262,7 +262,7 @@ class VTcp_transazioni
                 }
                 unset($row['trans_id']);
 
-                $articles[] = $row;
+                $articles[$row['hash_code']] = $row;
 
                 $transactions[$trans_id]['articles'] = $articles;
             }
@@ -283,11 +283,9 @@ class VTcp_transazioni
 	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
 		    $trans_id = $row['trans_id'];
 		    if (key_exists($trans_id, $transactions)) {
-			    foreach($transactions[$trans_id]['articles']  as $id => $article) {
-			    	if ($article['hash_code'] == $row['addition_article_hash_code']) {
-			    		$article['addition_article_price'] += $row['price'];
-					    $transactions[$trans_id]['articles'][$id] = $article;
-				    }
+		    	if (key_exists($row['addition_article_hash_code'], $transactions[$trans_id]['articles'])) {
+				    $transactions[$trans_id]['articles'][$row['addition_article_hash_code']] =
+					    round($transactions[$trans_id]['articles'][$row['addition_article_hash_code']] + $row['price'],2);
 			    }
 		    }
 	    }
@@ -295,14 +293,14 @@ class VTcp_transazioni
 	    //calcolo i menu
 	    foreach($transactions as $trans_id => $transaction) {
 		    $menus = [];
-		    foreach($transaction['articles'] as $article) {
+		    foreach($transaction['articles'] as $hash_code => $article) {
 				$owner_hash_code = $article['owner_hash_code'];
-				if ($owner_hash_code != '') {
+				if ($owner_hash_code != '0') {
 					if (!key_exists($owner_hash_code, $menus)) {
 						$menus[$owner_hash_code] = ['id' => $article['menu_id'], 'price' => 0, 'articles' => []];
 					}
-					$menus[$owner_hash_code]['price'] += $article['pricelevel_unit_price'] - $article['price'];
-					$menus[$owner_hash_code]['articles'][] = $article['hash_code'];
+					$menus[$owner_hash_code]['price'] += round($article['pricelevel_unit_price'] - $article['price'],2);
+					$menus[$owner_hash_code]['articles'][] = $hash_code;
 				}
 		    }
 		    $transactions[$trans_id]['menus'] = $menus;
