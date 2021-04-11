@@ -330,7 +330,8 @@ class VTcp_transazioni
 						join TCPOS4.dbo.trans_promotions tp on tp.transaction_id = t.id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
-					group by t.id, tp.promotion_id;";
+					group by t.id, tp.promotion_id
+					having amount <> 0;";
 	    $stmt = $conn->query( $stmt );
 	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
 		    $trans_id = $row['trans_id'];
