@@ -307,19 +307,18 @@ class VTcp_transazioni
 		    $transactions[$trans_id]['menus'] = $menus;
 	    }
 
-	    $stmt = "	select t.id trans_id, sum(td.amount) amount 
+	    $stmt = "	select t.id trans_id, td.discount_id, sum(td.amount) amount 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.trans_discounts td on t.id = td.transaction_id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null and td.discount_id = 6
-					group by t.id;";
+					group by t.id, td.discount_id;";
 	    $stmt = $conn->query( $stmt );
 	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
 		    $trans_id = $row['trans_id'];
-		    if (key_exists($trans_id, $transactions)) {
-			    $transactions[$trans_id]['round'] = $row['amount'];
-		    }
+		    unset($row['trans_id']);
+		    $transactions[$trans_id][] = $row;
 	    }
 
 
