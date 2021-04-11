@@ -324,7 +324,7 @@ class VTcp_transazioni
 	    }
 
 	    //calcolo le promozioni
-	    $stmt = "	select t.id trans_id, tp.promotion_id, sum(tp.discount + tp.offered_amount) amount 
+	    $stmt = "	select t.id trans_id, tp.promotion_id, sum(tp.amount + tp.offered_amount) amount 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.trans_promotions tp on tp.transaction_id = t.id 
