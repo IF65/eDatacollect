@@ -312,7 +312,7 @@ class VTcp_transazioni
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.trans_discounts td on t.id = td.transaction_id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
-					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null and td.discount_id = 6
+					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null 
 					group by t.id, td.discount_id;";
 	    $stmt = $conn->query( $stmt );
 	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
