@@ -225,6 +225,7 @@ class VTcp_transazioni
             $transactions[$trans_id]['articles'] = [];
             $transactions[$trans_id]['points'] = [];
 	        $transactions[$trans_id]['discounts'] = [];
+	        $transactions[$trans_id]['promotions'] = [];
         }
 
         $stmt = "	select 
@@ -307,6 +308,7 @@ class VTcp_transazioni
 		    $transactions[$trans_id]['menus'] = $menus;
 	    }
 
+	    //calcolo gli sconti
 	    $stmt = "	select t.id trans_id, td.discount_id, sum(td.amount) amount 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
@@ -321,7 +323,22 @@ class VTcp_transazioni
 		    $transactions[$trans_id]['discounts'][] = $row;
 	    }
 
+	    //calcolo le promozioni
+	    $stmt = "	select t.id trans_id, tp.promotion_id, sum(tp.discount + tp.offered_amount) amount 
+					FROM TCPOS4.dbo.transactions t 
+						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
+						join TCPOS4.dbo.trans_promotions tp on tp.transaction_id = t.id 
+						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
+					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
+					group by t.id, tp.promotion_id;";
+	    $stmt = $conn->query( $stmt );
+	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
+		    $trans_id = $row['trans_id'];
+		    unset($row['trans_id']);
+		    $transactions[$trans_id]['promotions'][] = $row;
+	    }
 
+		//calcolo i punti
         $stmt = "	select t.id trans_id, tpc.points_balance, tpc.points_gained, tpc.points_spent, tpc.points_used, pc.code, pc.description 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
