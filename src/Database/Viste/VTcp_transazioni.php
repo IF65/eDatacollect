@@ -224,7 +224,7 @@ class VTcp_transazioni
             $transactions[$trans_id] = $row;
             $transactions[$trans_id]['articles'] = [];
             $transactions[$trans_id]['points'] = [];
-	        $transactions[$trans_id]['round'] = 0;
+	        $transactions[$trans_id]['discounts'] = [];
         }
 
         $stmt = "	select 
@@ -318,7 +318,7 @@ class VTcp_transazioni
 	    while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
 		    $trans_id = $row['trans_id'];
 		    unset($row['trans_id']);
-		    $transactions[$trans_id][] = $row;
+		    $transactions[$trans_id]['discounts'][] = $row;
 	    }
 
 
