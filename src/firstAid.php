@@ -5,7 +5,7 @@ $debug = true;
 
 $sqlDetails = [];
 
-require(realpath(__DIR__ . '/..').'/src/Database/autoload.php');
+require(__DIR__ . '/..');
 
 use Database\Database;
 

@@ -232,6 +232,9 @@ class TIdc extends TTable {
    						select 'V' tipo, concat(i.store, replace(i.ddate,'-',''), i.reg, lpad(t.userno,3,'0')) id, i.`taxcode` codice, sum(case when t.recordcode2 = '0' then i.`amount` else i.`amount`* -1 end) s1, sum(case when t.recordcode2 = '0' then i.`taxamount` else i.`taxamount`* -1 end) s2  from `$tableName` as i join (select store, ddate, reg, trans, userno, recordcode2 from `$tableName` where ddate = :ddate and store = :store and binary recordtype = 'H' and recordcode1 = '1') as t on i.store = t.store and i.ddate=t.ddate and i.reg=t.reg and i.trans=t.trans
                         where binary i.recordtype = 'V' and  recordcode1 = '1' group by 1,2,3
                         union
+   						select 'W' tipo, concat(i.store, replace(i.ddate,'-',''), i.reg, lpad(t.userno,3,'0')) id, i.`taxcode` codice, round(sum(case when i.totalamount<0 then i.totaltaxableamount*-1 else i.totaltaxableamount end) - sum(case when i.totalamount<0 then i.taxamount*-1 else i.taxamount end),2) s1, sum(case when i.totalamount<0 then i.taxamount*-1 else i.taxamount end) s2 from `$tableName` as i join (select store, ddate, reg, trans, userno from `$tableName` where ddate = :ddate and store = :store and binary recordtype = 'H' and recordcode1 = '1') as t on i.store = t.store and i.ddate=t.ddate and i.reg=t.reg and i.trans=t.trans
+						where binary i.recordtype = 'S' group by 1,2,3
+						union
                         select 'T' tipo, concat(i.store, replace(i.ddate,'-',''), i.reg, lpad(t.userno,3,'0')) id, i.`paymentform` codice, sum(i.`totalamount`) s1, 0 s2  from `$tableName` as i join (select store, ddate, reg, trans, userno from `$tableName` where ddate = :ddate and store = :store and binary recordtype = 'H' and recordcode1 = '1') as t on i.store = t.store and i.ddate=t.ddate and i.reg=t.reg and i.trans=t.trans
                         where binary i.recordtype = 'T' and  recordcode1 = '1' group by 1,2,3 
                         union
