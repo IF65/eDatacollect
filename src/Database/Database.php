@@ -150,7 +150,7 @@
         public function incassiInTempoReale(array $request): string {
             $rows = [];
 
-	        /*$tcpos = $this->v_tcp_transazioni->incassiInTempoReale($request);
+	        $tcpos = $this->v_tcp_transazioni->incassiInTempoReale($request);
 	        foreach($tcpos as $row) {
 		        $index = $row['store'] . $row['ddate'];
 		        $rows[$index] = [
@@ -159,7 +159,7 @@
 			        'totalamount' => $row['totalamount'] * 1,
 			        'customerCount' => $row['customerCount'] * 1
 		        ];
-	        }*/
+	        }
 
 	        $asar = $this->t_idc->incassiInTempoReale($request);
 	        foreach($asar as $row) {
