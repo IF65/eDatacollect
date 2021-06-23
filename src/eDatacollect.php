@@ -16,7 +16,7 @@ if ($debug) {
     //$input = "{\"function\":\"creazioneDatacollectTcPos\",\"data\":\"2021-01-30\",\"sede\":\"0501\"}";
     //$input = "{\"function\":\"recuperaDatiPerQuadratura\",\"data\":\"2021-03-21\",\"sede\":\"3152\"}";
     //$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-02-17\",\"sede\":\"0155\",\"cassa\":\"052\",\"transazione\":\"0309\"}";
-	$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-06-15\",\"sede\":\"0201\"}";
+	//$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-06-22\",\"sede\":\"0186\"}";
     //$input = "{\"function\":\"recuperaFatture\"}";
     //$input = "{\"function\":\"creaFileInterscambioFatture\"}";
     //$input = "{\"function\":\"creazioneDatacollectRiepvegiTxt\",\"data\":\"2020-09-06\",\"sede\":\"0501\"}";
@@ -27,7 +27,7 @@ if ($debug) {
     //$input = "{\"function\":\"recuperaSospesi\",\"data\":\"2021-03-24\",\"sede\":\"0201\"}";
 	//$input = "{\"function\":\"creaFatturaMtx\",\"ddate\":\"2021-01-13\",\"store\":\"0128\",\"reg\":\"002\",\"trans\":\"5041\"}";
 
-	//$input = "{\"function\":\"incassiInTempoReale\",\"data\":\"2021-02-11\"}";
+	$input = "{\"function\":\"incassiInTempoRealeTxt\",\"data\":\"2021-06-23\"}";
 
     $request = json_decode($input, true);
 } else {
@@ -91,6 +91,18 @@ elseif ($request['function'] == 'creazioneDatacollectRiepvegiTxt') {
 elseif ($request['function'] == 'incassiInTempoReale') {
     $result = $db->incassiInTempoReale( $request );
     echo $result;
+
+}
+elseif ($request['function'] == 'incassiInTempoRealeTxt') {
+	$incassiJson = $db->incassiInTempoReale( $request );
+
+	$incassi = json_decode($incassiJson, true);
+
+	$result = [];
+	foreach($incassi as $incasso) {
+		$result[] = sprintf('%s%s%+012.2f%08d', str_replace('-','',$incasso['ddate']), $incasso['store'], $incasso['totalamount'], $incasso['customerCount']);
+	}
+	echo json_encode($result);
 
 }
 elseif ($request['function'] == 'recuperaMTXRigheFatture') {
