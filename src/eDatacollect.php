@@ -98,11 +98,11 @@ elseif ($request['function'] == 'incassiInTempoRealeTxt') {
 
 	$incassi = json_decode($incassiJson, true);
 
-	$result = [];
+	$result = '';
 	foreach($incassi as $incasso) {
-		$result[] = sprintf('%s%s%+012.2f%08d', str_replace('-','',$incasso['ddate']), $incasso['store'], $incasso['totalamount'], $incasso['customerCount']);
+		$result .= sprintf('%s%s%+012.2f%08d', str_replace('-','',$incasso['ddate']), $incasso['store'], $incasso['totalamount'], $incasso['customerCount']) . "\n";
 	}
-	echo json_encode($result);
+	echo $result;
 
 }
 elseif ($request['function'] == 'recuperaMTXRigheFatture') {
