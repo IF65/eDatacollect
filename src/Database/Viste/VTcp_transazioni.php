@@ -759,13 +759,14 @@ class VTcp_transazioni
 
             $conn->query( "update TCPOS4.dbo.transactions set exported = 10 where fiscal_invoice is not NULL and exported = 0;" );
 
-            $sql = "     select 
+            $sql = "    select 
                         t.id,
                         case 
-                            when s.code = '0600' then '0502' 
-                            when s.code = '0700' then '0503' 
-                            else '0501' 
-                        end shop_code,
+        					when left(s.code, 4) = '0600' then '0502' 	
+        					when left(s.code, 4) = '0700' then '0503' 
+    					else 
+        					left(s.code, 4) 
+    					end shop_code,
                         t2.code till_code,
                         t2.description, 
                         t.fiscal_invoice invoice_num, 
@@ -806,7 +807,7 @@ class VTcp_transazioni
             }
 
 
-            $sql = "     select 
+            $sql = "    select 
                         t.id,
                         ta.hash_code, 
                         a.code,
