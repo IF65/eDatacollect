@@ -618,7 +618,7 @@ class TIdc extends TTable {
 		}
 	}
 
-	public function elencoTransazioni(array $request): string {
+	public function elencoTransazioni(array $request): array {
 		try {
 			$stmt = "
 				select store, ddate, reg, trans, ttime, totalamount 
@@ -633,7 +633,7 @@ class TIdc extends TTable {
 			]);
 			$result = $h_query->fetchAll(\PDO::FETCH_ASSOC);
 
-			return json_encode($result);
+			return $result;
 
 		} catch (PDOException $e) {
 			return '';

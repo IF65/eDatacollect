@@ -205,7 +205,7 @@
 	        return $this->v_mtx_fatture->creaFattura($request);
         }
 
-        public function elencoTransazioni(array $request):string {
+        public function elencoTransazioni(array $request):array {
         	return $this->t_idc->elencoTransazioni($request);
         }
 
