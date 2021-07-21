@@ -25,7 +25,7 @@ if ($debug) {
     //file_put_contents('/Users/if65/Desktop/testFatture.txt', $result);
     //$input = "{\"function\":\"recuperaBarcode\",\"articoli\":[\"6364070\"]}";
     //$input = "{\"function\":\"recuperaSospesi\",\"data\":\"2021-03-24\",\"sede\":\"0201\"}";
-	//$input = "{\"function\":\"creaFatturaMtx\",\"ddate\":\"2021-01-13\",\"store\":\"0128\",\"reg\":\"002\",\"trans\":\"5041\"}";
+	$input = "{\"function\":\"elencoTransazioni\",\"ddate\":\"2021-07-06\",\"store\":\"0101\"}";
 
 	//$input = "{\"function\":\"incassiInTempoRealeTxt\",\"data\":\"2021-06-23\"}";
 

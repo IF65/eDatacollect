@@ -623,14 +623,15 @@ class TIdc extends TTable {
 			$stmt = "
 				select store, ddate, reg, trans, ttime, totalamount 
 				from mtx.idc 
-				where binary recordcode1 = 1 and binary recordtype = 'F' and store = :store and ddate = :ddate 
+				where recordcode1 = 1 and binary recordtype = 'F' and store = :store and ddate = :ddate 
 				order by 1,2,3,4";
 			$h_query = $this->pdo->prepare($stmt);
 
-			$result = $h_query->execute([
+			$h_query->execute([
 				':store' => $request['store'],
-				':ddate' => $request['ddate'],
+				':ddate' => $request['ddate']
 			]);
+			$result = $h_query->fetchAll(\PDO::FETCH_ASSOC);
 
 			return json_encode($result);
 
