@@ -185,6 +185,10 @@
             return $this->t_idc->recuperaMTXRigheFatture( $request );
         }
 
+	    public function dettaglioQuadratura(array $request): string {
+		    return $this->t_idc->dettaglioQuadratura( $request );
+	    }
+
         public function recuperaFatture(): string {
             return $this->v_tcp_transazioni->recuperaFatture();
         }
@@ -199,6 +203,10 @@
 
         public function creaFatturaMtx(array $request):string {
 	        return $this->v_mtx_fatture->creaFattura($request);
+        }
+
+        public function elencoTransazioni(array $request):string {
+        	return $this->t_idc->elencoTransazioni($request);
         }
 
         public function __destruct() {

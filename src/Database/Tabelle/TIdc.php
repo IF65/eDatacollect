@@ -598,6 +598,45 @@ class TIdc extends TTable {
 		}
 	}
 
+	public function dettaglioQuadratura(array $request): string {
+		try {
+			$stmt = "
+				select i.store, i.ddate, i.reg, i.trans, i.ttime, t.recordcode2 type, f.totalamount 
+				from mtx.idc as i join 
+				    (select distinct store, ddate, reg, trans, recordcode2 from mtx.idc where recordcode1 = 0 and binary recordtype = 'T' limit 1) as t on i.store=t.store and i.ddate=t.ddate and i.reg=t.reg and i.trans=t.trans join 
+				    (select distinct store, ddate, reg, trans, totalamount from mtx.idc where recordcode1 = 0 and binary recordtype = 'F') as f on i.store=f.store and i.ddate=f.ddate and i.reg=f.reg and i.trans=f.trans 
+				where i.store = :store and i.ddate = :ddate and i.recordcode1 = 0 and binary i.recordtype = 'H';";
+			$h_query = $this->pdo->prepare($stmt);
 
+			$result = '';
+
+
+			return $result;
+
+		} catch (PDOException $e) {
+			return '';
+		}
+	}
+
+	public function elencoTransazioni(array $request): string {
+		try {
+			$stmt = "
+				select store, ddate, reg, trans, ttime, totalamount 
+				from mtx.idc 
+				where binary recordcode1 = 1 and binary recordtype = 'F' and store = :store and ddate = :ddate 
+				order by 1,2,3,4";
+			$h_query = $this->pdo->prepare($stmt);
+
+			$result = $h_query->execute([
+				':store' => $request['store'],
+				':ddate' => $request['ddate'],
+			]);
+
+			return json_encode($result);
+
+		} catch (PDOException $e) {
+			return '';
+		}
+	}
 }
 
