@@ -27,6 +27,7 @@ if ($debug) {
     //$input = "{\"function\":\"recuperaSospesi\",\"data\":\"2021-03-24\",\"sede\":\"0201\"}";
 	//$input = "{\"function\":\"elencoTransazioni\",\"ddate\":\"2021-07-06\",\"store\":\"0101\"}";
 
+	//$input = "{\"function\":\"aggiornaStatoQuadratura\",\"ddate\":\"2021-02-22\",\"store\":\"0155\",\"status\":\"3\",\"eod\":\"1\"}";
 	//$input = "{\"function\":\"incassiInTempoRealeTxt\",\"data\":\"2021-06-23\"}";
 
     $request = json_decode($input, true);
@@ -166,6 +167,12 @@ elseif ($request['function'] == 'creaFatturaMtx') {
 }
 elseif ($request['function'] == 'dettaglioQuadratura') {
 	$result =  json_encode($db->dettaglioQuadratura($request));
+
+	echo $result;
+
+}
+elseif ($request['function'] == 'aggiornaStatoQuadratura') {
+	$result =  json_encode($db->aggiornaStatoQuadratura($request));
 
 	echo $result;
 

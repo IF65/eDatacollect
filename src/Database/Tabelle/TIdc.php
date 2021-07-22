@@ -618,6 +618,30 @@ class TIdc extends TTable {
 		}
 	}
 
+	public function aggiornaStatoQuadratura(array $request): array {
+		try {
+
+			$stmt = "update mtx.eod set status = :status, eod = :eod where store = :store and ddate = :ddate";
+			$h_query = $this->pdo->prepare($stmt);
+			$h_query->execute([':store' => $request['store'], ':ddate' => $request['ddate'], ':status' => $request['status'], ':eod' => $request['eod']]);
+
+			$stmt = "select status, eod from mtx.eod where store = :store and ddate = :ddate";
+			$h_query = $this->pdo->prepare($stmt);
+			$h_query->execute([':store' => $request['store'], ':ddate' => $request['ddate']]);
+			$result = $h_query->fetchAll(\PDO::FETCH_ASSOC);
+
+			$error = 100;
+			if ($result[0]['status'] == $request['status'] && $result[0]['eod'] == $request['eod']) {
+				$error = 0;
+			}
+
+			return ['error' => $error, 'status' => $result[0]['status'], 'eod' => $result[0]['eod']];
+
+		} catch (PDOException $e) {
+			return ['error' => 999]; //errore nell'aggiornamento db
+		}
+	}
+
 	public function elencoTransazioni(array $request): array {
 		try {
 			$stmt = "

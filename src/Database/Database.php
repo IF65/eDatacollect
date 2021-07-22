@@ -189,6 +189,10 @@
 		    return $this->t_idc->dettaglioQuadratura( $request );
 	    }
 
+	    public function aggiornaStatoQuadratura(array $request): array {
+		    return $this->t_idc->aggiornaStatoQuadratura( $request );
+	    }
+
         public function recuperaFatture(): string {
             return $this->v_tcp_transazioni->recuperaFatture();
         }
