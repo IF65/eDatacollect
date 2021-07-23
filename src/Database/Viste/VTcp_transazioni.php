@@ -1073,11 +1073,12 @@ class VTcp_transazioni
                         t.fiscal_invoice invoice_num,
                         convert(date, t.invoice_date) invoice_date,
                         convert(time, t.invoice_date) invoice_time,
-                        case 
-                            when s.code = '0600' then '0502' 
-                            when s.code = '0700' then '0503' 
-                            else '0501' 
-                        end shop_code,
+                         case 
+        					when left(s.code, 4) = '0600' then '0502' 	
+        					when left(s.code, 4) = '0700' then '0503' 
+    					else 
+        					left(s.code, 4) 
+    					end shop_code,
                         isnull(tfd.name,'') name, 
                         isnull(tfd.surname,'') surname, 
                         isnull(tfd.fiscal_code,'') fiscal_code,
@@ -1103,8 +1104,18 @@ class VTcp_transazioni
                 $row['invoice_num'] = '51-' . $row['invoice_num'];
             } elseif ($row['shop_code'] == '0502') {
                 $row['invoice_num'] = '52-' . $row['invoice_num'];
+            }  elseif ($row['shop_code'] == '0503') {
+	            $row['invoice_num'] = '53-' . $row['invoice_num'];
+            }  elseif ($row['shop_code'] == '0201') {
+	            $row['invoice_num'] = '51-' . $row['invoice_num'];
+            }  elseif ($row['shop_code'] == '0155') {
+	            $row['invoice_num'] = '52-' . $row['invoice_num'];
+            }  elseif ($row['shop_code'] == '0142') {
+	            $row['invoice_num'] = '53-' . $row['invoice_num'];
+            }  elseif ($row['shop_code'] == '0203') {
+	            $row['invoice_num'] = '54-' . $row['invoice_num'];
             } else {
-                $row['invoice_num'] = '53-' . $row['invoice_num'];
+                $row['invoice_num'] = '00-' . $row['invoice_num'];
             }
 
             $elencoFatture[] = $row;
