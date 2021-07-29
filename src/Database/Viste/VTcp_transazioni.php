@@ -800,8 +800,18 @@ class VTcp_transazioni
                     $row['invoice_num'] = '51-' . $row['invoice_num'];
                 } elseif ($row['shop_code'] == '0502') {
                     $row['invoice_num'] = '52-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0503') {
+	                $row['invoice_num'] = '52-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0201') {
+	                $row['invoice_num'] = '51-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0155') {
+	                $row['invoice_num'] = '52-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0142') {
+	                $row['invoice_num'] = '53-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0203') {
+	                $row['invoice_num'] = '54-' . $row['invoice_num'];
                 } else {
-                    $row['invoice_num'] = '53-' . $row['invoice_num'];
+                    $row['invoice_num'] = '00-' . $row['invoice_num'];
                 }
                 $fatture[$row['id']] = $row;
             }
@@ -921,14 +931,31 @@ class VTcp_transazioni
         $righe = [];
         $contatore = 0;
         foreach ($fatture as $id => $fattura) {
+	        $codiceSocietaEmittente = '02';
+	        $ragioneSocialeSocietaEmittente = 'ITALMARK S.R.L.';
+	        $partitaIvaSocietaEmittente = '04145590982';
+        	if ($fattura['shop_code'] == '0501') {
+				$codiceSocietaEmittente = '05';
+		        $ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
+		        $partitaIvaSocietaEmittente = '04130570981';
+	        } elseif ($fattura['shop_code'] == '0502') {
+		        $codiceSocietaEmittente = '05';
+		        $ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
+		        $partitaIvaSocietaEmittente = '04130570981';
+	        } elseif ($fattura['shop_code'] == '0503') {
+		        $codiceSocietaEmittente = '05';
+		        $ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
+		        $partitaIvaSocietaEmittente = '04130570981';
+	        };
+
             $righe[] = sprintf('%s;%s;%04d;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%d;%d;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;',
                 '100', // tipo record
                 $fattura['invoice_num'], // numero fattura
                 ++$contatore, // progressivo
                 str_replace('-', '', $fattura['invoice_date']), // data fattura
-                '05', // codice società emittente
-                'IT\'S MARKET S.R.L.', // ragione sociale emittente
-                '04130570981', // partita iva emittente
+	            $codiceSocietaEmittente, // codice società emittente
+	            $ragioneSocialeSocietaEmittente, // ragione sociale emittente
+	            $partitaIvaSocietaEmittente, // partita iva emittente
                 '', // codice societa destinataria (qc_ced_clienti)
                 trim(trim ($fattura['name'], " \t\n\r\0\x0B") . ' ' . trim ($fattura['surname'], " \t\n\r\0\x0B")), // ragione sociale destinatario
                 trim($fattura['fiscal_code']," \t\n\r\0\x0B"), // codice fiscale destinatario
