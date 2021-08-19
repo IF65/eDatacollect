@@ -33,7 +33,7 @@ class VTcp_transazioni
         } elseif ($request['sede'] == '0155') {
 	        $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
         } else {
-            $tillSearch = "";
+            $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
         }
 
         $conn = new \PDO("sqlsrv:Server=".$this->hostname.",9089;Database=".$this->dbname, $this->username, $this->password);
@@ -762,6 +762,7 @@ class VTcp_transazioni
             $sql = "    select 
                         t.id,
                         case 
+                            when left(s.code, 4) = '0500' then '0501'
         					when left(s.code, 4) = '0600' then '0502' 	
         					when left(s.code, 4) = '0700' then '0503' 
     					else 
@@ -801,7 +802,7 @@ class VTcp_transazioni
                 } elseif ($row['shop_code'] == '0502') {
                     $row['invoice_num'] = '52-' . $row['invoice_num'];
                 } elseif ($row['shop_code'] == '0503') {
-	                $row['invoice_num'] = '52-' . $row['invoice_num'];
+	                $row['invoice_num'] = '53-' . $row['invoice_num'];
                 } elseif ($row['shop_code'] == '0201') {
 	                $row['invoice_num'] = '51-' . $row['invoice_num'];
                 } elseif ($row['shop_code'] == '0155') {
@@ -1101,6 +1102,7 @@ class VTcp_transazioni
                         convert(date, t.invoice_date) invoice_date,
                         convert(time, t.invoice_date) invoice_time,
                          case 
+                            when left(s.code, 4) = '0500' then '0501' 
         					when left(s.code, 4) = '0600' then '0502' 	
         					when left(s.code, 4) = '0700' then '0503' 
     					else 
