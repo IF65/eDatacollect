@@ -28,8 +28,9 @@ if ($debug) {
 	//$input = "{\"function\":\"elencoTransazioni\",\"ddate\":\"2021-07-06\",\"store\":\"0101\"}";
 
 	//$input = "{\"function\":\"aggiornaStatoQuadratura\",\"ddate\":\"2021-02-22\",\"store\":\"0155\",\"status\":\"3\",\"eod\":\"1\"}";
-	$input = '{"function":"aggiornaStatoQuadratura","store":"0101","ddate":"2021-07-22T00:00:00","status":0,"eod":0}';
+	//$input = '{"function":"aggiornaStatoQuadratura","store":"0101","ddate":"2021-07-22T00:00:00","status":0,"eod":0}';
 	//$input = "{\"function\":\"incassiInTempoRealeTxt\",\"data\":\"2021-06-23\"}";
+	$input = '{"function":"recuperaCodiceArticoliPeso"}';
 
     $request = json_decode($input, true);
 } else {
@@ -136,6 +137,11 @@ elseif ($request['function'] == 'recuperaBarcode') {
 elseif ($request['function'] == 'recuperaReparto') {
     $result = $db->recuperaReparto( $request['articoli'] );
     echo $result;
+
+}
+elseif ($request['function'] == 'recuperaCodiceArticoliPeso') {
+	$result = $db->recuperaCodiceArticoliPeso();
+	echo $result;
 
 }
 elseif ($request['function'] == 'recuperaSospesi') {

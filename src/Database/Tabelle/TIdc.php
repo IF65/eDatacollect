@@ -515,6 +515,25 @@ class TIdc extends TTable {
         }
     }
 
+	public function recuperaCodiceArticoliPeso(): array {
+		try {
+			$stmt = "select CODICE_ARTICOLO codice from dimensioni.articolo where UM = 'KG' order by 1";
+			$handler = $this->pdo->prepare($stmt);
+
+			$result = [];
+			if ($handler->execute()) {
+				foreach ($handler->fetchAll( \PDO::FETCH_ASSOC) as $row) {
+					$result[$row['codice']] = 'KG';
+				}
+			}
+
+			return $result;
+
+		} catch (PDOException $e) {
+			return [];
+		}
+	}
+
 	public function elencoTransazioniNonChiuse(array $request): array {
 		try {
 			$stmt = "

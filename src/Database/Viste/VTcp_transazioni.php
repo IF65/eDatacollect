@@ -1133,15 +1133,15 @@ class VTcp_transazioni
                 $row['invoice_num'] = '51-' . $row['invoice_num'];
             } elseif ($row['shop_code'] == '0502') {
                 $row['invoice_num'] = '52-' . $row['invoice_num'];
-            }  elseif ($row['shop_code'] == '0503') {
+            } elseif ($row['shop_code'] == '0503') {
 	            $row['invoice_num'] = '53-' . $row['invoice_num'];
-            }  elseif ($row['shop_code'] == '0201') {
+            } elseif ($row['shop_code'] == '0201') {
 	            $row['invoice_num'] = '51-' . $row['invoice_num'];
-            }  elseif ($row['shop_code'] == '0155') {
+            } elseif ($row['shop_code'] == '0155') {
 	            $row['invoice_num'] = '52-' . $row['invoice_num'];
-            }  elseif ($row['shop_code'] == '0142') {
+            } elseif ($row['shop_code'] == '0142') {
 	            $row['invoice_num'] = '53-' . $row['invoice_num'];
-            }  elseif ($row['shop_code'] == '0203') {
+            } elseif ($row['shop_code'] == '0203') {
 	            $row['invoice_num'] = '54-' . $row['invoice_num'];
             } else {
                 $row['invoice_num'] = '00-' . $row['invoice_num'];

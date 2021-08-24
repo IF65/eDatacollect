@@ -142,6 +142,11 @@
 
         }
 
+	    public function recuperaCodiceArticoliPeso(): string {
+		    return json_encode($this->t_idc->recuperaCodiceArticoliPeso());
+
+	    }
+
         public function  creazioneDatacollectRiepvegiTxt(array $request): string {
             $dati = $this->creazioneDatacollectRiepvegi($request);
             return $this->v_tcp_transazioni->creazioneDatacollectRiepvegiTxt($request, $dati);
