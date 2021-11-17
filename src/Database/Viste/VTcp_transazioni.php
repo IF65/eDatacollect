@@ -240,6 +240,8 @@ class VTcp_transazioni
 						coalesce(ta.qty_weight,0) qty_weight,
 						coalesce(ta.price,0) price,
 						coalesce(ta.discount,0) discount,
+	       				coalesce(d2.code,'') promotion_code,
+    					coalesce(d2.description, '') promotion_description,
 						coalesce(ta.promotion_discount,0) promotion_discount,
 						coalesce(ta.pricelevel_unit_price, ta.price) pricelevel_unit_price,
 						coalesce(ta.price_overridden, 0) price_overridden,		
@@ -249,6 +251,8 @@ class VTcp_transazioni
 						join articles a on a.id = ta.article_id
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
+						join TCPOS4.dbo.trans_discounts td on t.id = td.transaction_id 
+    					join discounts d2 on td.discount_id =d2.id
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_article_hash_code is null and 
 					      ta.addition_menu_hash_code is null and t.delete_timestamp is null and ta.delete_timestamp is null and 
 					      ta.delete_operator_id is null;";
