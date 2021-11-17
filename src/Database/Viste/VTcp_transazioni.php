@@ -251,8 +251,8 @@ class VTcp_transazioni
 						join articles a on a.id = ta.article_id
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
-						join TCPOS4.dbo.trans_discounts td on t.id = td.transaction_id 
-    					join discounts d2 on td.discount_id =d2.id
+						left join TCPOS4.dbo.trans_discounts td on t.id = td.transaction_id 
+    					left join discounts d2 on td.discount_id =d2.id
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_article_hash_code is null and 
 					      ta.addition_menu_hash_code is null and t.delete_timestamp is null and ta.delete_timestamp is null and 
 					      ta.delete_operator_id is null;";
