@@ -255,7 +255,7 @@ class VTcp_transazioni
     					left join discounts d2 on td.discount_id =d2.id
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_article_hash_code is null and 
 					      ta.addition_menu_hash_code is null and t.delete_timestamp is null and ta.delete_timestamp is null and 
-					      ta.delete_operator_id is null;";
+					      ta.delete_operator_id is null and (t.split_num is null or t.split_num = 1);";
 
         $stmt = $conn->query( $stmt );
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) ) {
