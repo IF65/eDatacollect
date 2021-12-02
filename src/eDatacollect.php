@@ -16,7 +16,7 @@ if ($debug) {
     //$input = "{\"function\":\"creazioneDatacollectTcPos\",\"data\":\"2021-01-30\",\"sede\":\"0501\"}";
     //$input = "{\"function\":\"recuperaDatiPerQuadratura\",\"data\":\"2021-03-21\",\"sede\":\"3152\"}";
     //$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-02-17\",\"sede\":\"0155\",\"cassa\":\"052\",\"transazione\":\"0309\"}";
-	$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-11-07\",\"sede\":\"0148\"}";
+	$input = "{\"function\":\"creazioneDatacollect\",\"data\":\"2021-11-14\",\"sede\":\"0201\"}";
     //$input = "{\"function\":\"recuperaFatture\"}";
     //$input = "{\"function\":\"creaFileInterscambioFatture\"}";
     //$input = "{\"function\":\"creazioneDatacollectRiepvegiTxt\",\"data\":\"2020-09-06\",\"sede\":\"0501\"}";
