@@ -130,11 +130,13 @@ class TIdc extends TTable {
 
 	public function incassiInTempoReale(array $request): array {
     	try {
-		    $stmt = "	select ddate, store, sum(totalamount) totalamount, count(*) customerCount 
+		    /*$stmt = "	select ddate, store, sum(totalamount) totalamount, count(*) customerCount
 						from mtx.idc where ddate = :ddate and recordcode1 = 1 and binary recordtype = 'F' group by 1,2 
 						union
 						select ddate, store, totalamount, itemCount/2 customerCount 
-						from mtx.eod where ddate >= date_sub(:ddate, interval 7 day) and ddate < :ddate order by 1,2";
+						from mtx.eod where ddate >= date_sub(:ddate, interval 7 day) and ddate < :ddate order by 1,2";*/
+		    $stmt = "	select ddate, store, sum(totalamount) totalamount, count(*) customerCount 
+						from mtx.idc where ddate = :ddate and recordcode1 = 1 and binary recordtype = 'F' group by 1,2";
 		    $handler = $this->pdo->prepare($stmt);
 
 		    $result = [];
