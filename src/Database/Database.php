@@ -164,13 +164,22 @@
 			        'totalamount' => $row['totalamount'] * 1,
 			        'customerCount' => $row['customerCount'] * 1
 		        ];
+				if ($row['store'] == '0500') {
+					$index = '0501' . $row['ddate'];
+					$rows[$index] = [
+						'ddate' => $row['ddate'],
+						'store' => '0501',
+						'totalamount' => $row['totalamount'] * 1,
+						'customerCount' => $row['customerCount'] * 1
+					];
+				}
 	        }
 
 	        $asar = $this->t_idc->incassiInTempoReale($request);
 	        foreach($asar as $row) {
 	        	$index = $row['store'] . $row['ddate'];
-				// solo per il negozio 0501. E' una stronzata ma è l'unico che vogliono vedere separato tra tcpos e idc
-	        	if (key_exists($index, $rows) || ($row['store'] == '0500' && key_exists('0501' . $row['ddate'], $rows))) {
+
+	        	if (key_exists($index, $rows)) {
 			        $rows[$index]['totalamount'] += $row['totalamount'];
 			        $rows[$index]['customerCount'] += $row['customerCount'];
 		        } else {
