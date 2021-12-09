@@ -232,7 +232,7 @@ class VTcp_transazioni
 						ta.transaction_id trans_id,
 						ta.hash_code,
 						coalesce(ta.owner_hash_code,0) owner_hash_code,
-						coalesce(ta.menu_id, 0) menu_id,
+						coalesce(m2.code, 0) menu_id,
 						a.code article_code,
 					    a.description, 
 						coalesce(ta.vat_percent, 0) vat_percent,
@@ -253,6 +253,7 @@ class VTcp_transazioni
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
 						left join TCPOS4.dbo.trans_discounts td on t.id = td.transaction_id 
     					left join discounts d2 on td.discount_id =d2.id
+						left join menus m2 on ta.menu_id = m2.id
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and ta.addition_article_hash_code is null and 
 					      ta.addition_menu_hash_code is null and t.delete_timestamp is null and ta.delete_timestamp is null and 
 					      ta.delete_operator_id is null and (t.split_num is null or t.split_num = 1);";
