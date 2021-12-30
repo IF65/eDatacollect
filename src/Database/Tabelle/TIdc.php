@@ -238,7 +238,7 @@ class TIdc extends TTable {
 						where binary i.recordtype = 'S' group by 1,2,3
 						union
                         select 'T' tipo, concat(i.store, replace(i.ddate,'-',''), i.reg, lpad(t.userno,3,'0')) id, i.`paymentform` codice, sum(i.`totalamount`) s1, 0 s2  from `$tableName` as i join (select store, ddate, reg, trans, userno from `$tableName` where ddate = :ddate and store = :store and binary recordtype = 'H' and recordcode1 = '1') as t on i.store = t.store and i.ddate=t.ddate and i.reg=t.reg and i.trans=t.trans
-                        where binary i.recordtype = 'T' and  recordcode1 = '1' group by 1,2,3 
+                        where binary i.recordtype = 'T' and  recordcode1 = '1' and recordcode3 <> '2' group by 1,2,3 
                         union
                         select 'P' tipo, concat(store, replace(ddate,'-',''), reg, lpad(userno,3,'0')) id, ttime, totalamount s1, 0 s2 from `$tableName` where ddate = :ddate and store = :store and binary recordtype = 'F' and actioncode ='11' and recordcode1 = 0 and totalamount<>0
                         union
