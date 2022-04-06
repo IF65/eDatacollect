@@ -8,11 +8,13 @@ class VMtx_fatture
 {
 	protected $pdo = null;
 
-	public function __construct($pdo) {
+	public function __construct($pdo)
+	{
 		$this->pdo = $pdo;
 	}
 
-	public function creaFattura(array $request): string {
+	public function creaFattura(array $request): string
+	{
 		try {
 			$fattura = [];
 
@@ -36,7 +38,7 @@ class VMtx_fatture
 				':reg' => $request['reg'],
 				':trans' => $request['trans'],
 			]);
-			$result = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+			$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 			$fattura['righe'] = $result;
 
 			$sql = "select i.taxcode ivaCodice, i.amount imponibile, i.taxamount imposta, i.totalAmount totale  
@@ -49,7 +51,7 @@ class VMtx_fatture
 				':reg' => $request['reg'],
 				':trans' => $request['trans'],
 			]);
-			$fattura['repartiIva'] = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+			$fattura['repartiIva'] = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 			$sql = "select ifnull(totalamount,0) totale from mtx.idc as i 
 					where i.store = :store and i.ddate = :ddate and i.reg = :reg and i.trans = :trans and binary recordtype = 'F';";
@@ -60,11 +62,11 @@ class VMtx_fatture
 				':reg' => $request['reg'],
 				':trans' => $request['trans'],
 			]);
-			$fattura['totale'] = ($stmt->fetchAll( \PDO::FETCH_ASSOC ))[0]['totale'];
+			$fattura['totale'] = ($stmt->fetchAll(\PDO::FETCH_ASSOC))[0]['totale'];
 
-            return json_encode(['errorMessage' => '', 'fattura' => $fattura, 'status'=>0]);
+			return json_encode(['errorMessage' => '', 'fattura' => $fattura, 'status' => 0]);
 		} catch (PDOException $e) {
-			return json_encode(['errorMessage' => $e->getMessage(), 'fattura' => '', 'status'=>100]);
+			return json_encode(['errorMessage' => $e->getMessage(), 'fattura' => '', 'status' => 100]);
 		}
 
 	}

@@ -684,5 +684,10 @@ class TIdc extends TTable {
 			return '';
 		}
 	}
+
+	public function creaJsonFattura(array $request): string {
+
+		return "";
+	}
 }
 

@@ -227,6 +227,10 @@
         	return $this->t_idc->elencoTransazioni($request);
         }
 
+		public function creaJsonFattura(array $request): string {
+			return $this->t_idc->creaJsonFattura($request);
+		}
+
         public function __destruct() {
             $this->pdo = null;
         }
