@@ -164,7 +164,7 @@
 			        'totalamount' => $row['totalamount'] * 1,
 			        'customerCount' => $row['customerCount'] * 1
 		        ];
-				if ($row['store'] == '0500') {
+				/*if ($row['store'] == '0500') {
 					$index = '0501' . $row['ddate'];
 					$rows[$index] = [
 						'ddate' => $row['ddate'],
@@ -172,7 +172,7 @@
 						'totalamount' => $row['totalamount'] * 1,
 						'customerCount' => $row['customerCount'] * 1
 					];
-				}
+				}*/
 	        }
 
 	        $asar = $this->t_idc->incassiInTempoReale($request);
