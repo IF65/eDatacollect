@@ -392,7 +392,7 @@ class TIdc extends TTable
 							}
 						}
 
-						if (preg_match('/^5$/', $row['recordtype'])) {
+						/*if (preg_match('/^5$/', $row['recordtype'])) {
 							$mixedField = sprintf('%04d:%s%s', $row['userno'], $row['misc'], $row['data']);
 							$dc[] = sprintf('%04s:%03d:%06s:%06s:%04d:%03d:%1s:%03s:%s',
 								$row['store'],
@@ -405,7 +405,7 @@ class TIdc extends TTable
 								$row['recordcode1'] . $row['recordcode2'] . '0',
 								$mixedField
 							);
-						}
+						}*/
 
 						if (preg_match('/^S$/', $row['recordtype'])) {
 							$dc[] = sprintf('%04s:%03d:%06s:%06s:%04d:%03d:%1s:%03s:%04d:%s:%011d%s',
