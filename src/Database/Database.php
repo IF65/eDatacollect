@@ -67,7 +67,7 @@
         }
 
         public function recuperaDatiPerQuadratura(array $request): string {
-            if ($request['sede'] == '0501' || $request['sede'] == '0201'|| $request['sede'] == '0155' || $request['sede'] == '0142' || $request['sede'] == '0203'|| $request['sede'] == '0204' || $request['sede'] == '0132'  || $request['sede'] == '0148' || $request['sede'] == '0115') {
+            if ($request['sede'] == '0501' || $request['sede'] == '0201'|| $request['sede'] == '0155' || $request['sede'] == '0142' || $request['sede'] == '0203'|| $request['sede'] == '0204' || $request['sede'] == '0132'  || $request['sede'] == '0148' || $request['sede'] == '0115'|| $request['sede'] == '0101') {
 	            $casseTCPOS = json_decode($this->v_tcp_transazioni->recuperaDatiPerQuadratura( $request ), true);
                 $casseASAR = json_decode($this->t_idc->recuperaDatiPerQuadratura($request), true);
 
