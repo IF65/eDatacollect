@@ -824,6 +824,8 @@ class VTcp_transazioni
 	                $row['invoice_num'] = '57-' . $row['invoice_num'];
                 } elseif ($row['shop_code'] == '0204') {
 	                $row['invoice_num'] = '58' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0101') {
+	                $row['invoice_num'] = '59' . $row['invoice_num'];
                 } else {
                     $row['invoice_num'] = '00-' . $row['invoice_num'];
                 }
