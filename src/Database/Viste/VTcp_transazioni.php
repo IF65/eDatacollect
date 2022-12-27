@@ -7,45 +7,49 @@ use PDOException;
 class VTcp_transazioni
 {
 
-	private $hostname = '10.11.14.250';
-	private $dbname = 'TCPOS4';
-	private $username = 'sa';
-	private $password = 'vfr456YHN';
+    private $hostname = '10.11.14.250';
+    private $dbname = 'TCPOS4';
+    private $username = 'sa';
+    private $password = 'vfr456YHN';
 
-	//private $mssqldriver = '{ODBC Driver 13 for SQL Server}';
+    //private $mssqldriver = '{ODBC Driver 13 for SQL Server}';
 
-	public function __construct()
-	{
-		//parent::__construct();
-	}
+    public function __construct()
+    {
+        //parent::__construct();
+    }
 
-	public function recuperaDatiPerQuadratura(array $request): string
-	{
-		$data = $request['data'];
+    public function recuperaDatiPerQuadratura(array $request): string
+    {
+        $data = $request['data'];
 
-		if ($request['sede'] == '0501') {
-			$tillSearch = " and ts.code >= '021' and ts.code <= '029'";
-		} elseif ($request['sede'] == '0502') {
-			$tillSearch = " and ts.code >= '031' and ts.code <= '039'";
-		} elseif ($request['sede'] == '0503') {
-			$tillSearch = " and ts.code >= '041' and ts.code <= '049'";
-		} elseif ($request['sede'] == '0201') {
-			$tillSearch = " and ts.code >= '021' and ts.code <= '029'";
-		} elseif ($request['sede'] == '0155') {
-			$tillSearch = " and ts.code >= '021' and ts.code <= '029'";
-		} else {
-			$tillSearch = " and ts.code >= '021' and ts.code <= '029'";
-		}
+        if ($request['sede'] == '0501') {
+            $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
+        } elseif ($request['sede'] == '0502') {
+            $tillSearch = " and ts.code >= '031' and ts.code <= '039'";
+        } elseif ($request['sede'] == '0503') {
+            $tillSearch = " and ts.code >= '041' and ts.code <= '049'";
+        } elseif ($request['sede'] == '0201') {
+            $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
+        } elseif ($request['sede'] == '0155') {
+            $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
+        } else {
+            $tillSearch = " and ts.code >= '021' and ts.code <= '029'";
+        }
 
-		$conn = new \PDO("sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname, $this->username, $this->password);
+        $conn = new \PDO(
+            "sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname,
+            $this->username,
+            $this->password
+        );
 
-		// eliminare //
-		/*$conn = new \PDO(
-			"sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname . ";TrustServerCertificate=true;Encrypt=false",
-			$this->username,
-			$this->password,
-			[\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::SQLSRV_ATTR_QUERY_TIMEOUT => 10, \PDO::ATTR_EMULATE_PREPARES => TRUE]
-		);*/
+        // eliminare //
+        /*$conn = new \PDO(
+            "sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname . ";TrustServerCertificate=true;Encrypt=false",
+            $this->username,
+            $this->password,
+            [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::SQLSRV_ATTR_QUERY_TIMEOUT => 10, \PDO::ATTR_EMULATE_PREPARES => TRUE]
+        );*/
 
 
         $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -196,50 +200,54 @@ class VTcp_transazioni
 
         $stmt = $conn->query($stmt);
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-	        $result[] = $row;
+            $result[] = $row;
         }
         return json_encode($result, true);
     }
 
-	public function creazioneDatacollectTcPos(array $request): string
-	{
-		$data = $request['data'];
+    public function creazioneDatacollectTcPos(array $request): string
+    {
+        $data = $request['data'];
 
-		if ($request['sede'] == '0501') {
-			$tillSearch = " and ts.code >= '021' and ts.code <= '029' and sh.code = '0500' ";
-		} elseif ($request['sede'] == '0502') {
-			$tillSearch = " and ts.code >= '031' and ts.code <= '039' and sh.code = '0600' ";
-		} elseif ($request['sede'] == '0503') {
-			$tillSearch = " and ts.code >= '041' and ts.code <= '049' and sh.code = '0700' ";
-		} else {
-			$tillSearch = " and sh.code = '" . $request['sede'] . "' ";
-		}
+        if ($request['sede'] == '0501') {
+            $tillSearch = " and ts.code >= '021' and ts.code <= '029' and sh.code = '0500' ";
+        } elseif ($request['sede'] == '0502') {
+            $tillSearch = " and ts.code >= '031' and ts.code <= '039' and sh.code = '0600' ";
+        } elseif ($request['sede'] == '0503') {
+            $tillSearch = " and ts.code >= '041' and ts.code <= '049' and sh.code = '0700' ";
+        } else {
+            $tillSearch = " and sh.code = '" . $request['sede'] . "' ";
+        }
 
-		$conn = new \PDO("sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname, $this->username, $this->password);
+        $conn = new \PDO(
+            "sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname,
+            $this->username,
+            $this->password
+        );
 
-		$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-		$conn->setAttribute(\PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10);
+        $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $conn->setAttribute(\PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10);
 
-		$stmt = "	select t.id trans_id, convert(varchar, t.trans_date, 126) trans_date, t.total_amount, t.trans_num, ts.code till_code, o.code operator_code, t.card_num
+        $stmt = "	select t.id trans_id, convert(varchar, t.trans_date, 126) trans_date, t.total_amount, t.trans_num, ts.code till_code, o.code operator_code, t.card_num
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.operators o  on t.operator_id = o.id 
 						join TCPOS4.dbo.shops sh on t.shop_id = sh.id 
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null";
 
-		$transactions = [];
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$trans_id = $row['trans_id'];
-			unset($row['trans_id']);
-			$transactions[$trans_id] = $row;
-			$transactions[$trans_id]['articles'] = [];
-			$transactions[$trans_id]['points'] = [];
-			$transactions[$trans_id]['discounts'] = [];
-			$transactions[$trans_id]['promotions'] = [];
-		}
+        $transactions = [];
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $trans_id = $row['trans_id'];
+            unset($row['trans_id']);
+            $transactions[$trans_id] = $row;
+            $transactions[$trans_id]['articles'] = [];
+            $transactions[$trans_id]['points'] = [];
+            $transactions[$trans_id]['discounts'] = [];
+            $transactions[$trans_id]['promotions'] = [];
+        }
 
-		$stmt = "	select 
+        $stmt = "	select 
 						ta.transaction_id trans_id,
 						ta.hash_code,
 						coalesce(ta.owner_hash_code,0) owner_hash_code,
@@ -269,24 +277,24 @@ class VTcp_transazioni
 					      ta.addition_menu_hash_code is null and t.delete_timestamp is null and ta.delete_timestamp is null and 
 					      ta.delete_operator_id is null and (t.split_num is null or t.split_num = 1);";
 
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$trans_id = $row['trans_id'];
-			if (key_exists($trans_id, $transactions)) {
-				$articles = [];
-				if (key_exists('articles', $transactions[$trans_id])) {
-					$articles = $transactions[$trans_id]['articles'];
-				}
-				unset($row['trans_id']);
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $trans_id = $row['trans_id'];
+            if (key_exists($trans_id, $transactions)) {
+                $articles = [];
+                if (key_exists('articles', $transactions[$trans_id])) {
+                    $articles = $transactions[$trans_id]['articles'];
+                }
+                unset($row['trans_id']);
 
-				$articles[$row['hash_code']] = $row;
+                $articles[$row['hash_code']] = $row;
 
-				$transactions[$trans_id]['articles'] = $articles;
-			}
-		}
+                $transactions[$trans_id]['articles'] = $articles;
+            }
+        }
 
-		// aggancio gli addition
-		$stmt = "select 
+        // aggancio gli addition
+        $stmt = "select 
 					ta.transaction_id trans_id,
 					ta.price, 
 					ta.addition_article_hash_code,
@@ -297,67 +305,73 @@ class VTcp_transazioni
 					join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
 				where convert(DATE, t.trans_date) = '$data' $tillSearch and  (ta.addition_article_hash_code is not null or ta.addition_menu_hash_code is not null) and 
 				      t.delete_timestamp is null and ta.delete_timestamp is null and ta.delete_operator_id is null;";
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$trans_id = $row['trans_id'];
-			if (key_exists($trans_id, $transactions)) {
-				if (key_exists($row['addition_article_hash_code'], $transactions[$trans_id]['articles'])) {
-					$transactions[$trans_id]['articles'][$row['addition_article_hash_code']]['addition_article_price'] =
-						round($transactions[$trans_id]['articles'][$row['addition_article_hash_code']]['addition_article_price'] + $row['price'], 2);
-				}
-			}
-		}
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $trans_id = $row['trans_id'];
+            if (key_exists($trans_id, $transactions)) {
+                if (key_exists($row['addition_article_hash_code'], $transactions[$trans_id]['articles'])) {
+                    $transactions[$trans_id]['articles'][$row['addition_article_hash_code']]['addition_article_price'] =
+                        round(
+                            $transactions[$trans_id]['articles'][$row['addition_article_hash_code']]['addition_article_price'] + $row['price'],
+                            2
+                        );
+                }
+            }
+        }
 
-		//calcolo i menu
-		foreach ($transactions as $trans_id => $transaction) {
-			$menus = [];
-			foreach ($transaction['articles'] as $hash_code => $article) {
-				$owner_hash_code = $article['owner_hash_code'];
-				if ($owner_hash_code != '0') {
-					if (!key_exists($owner_hash_code, $menus)) {
-						$menus[$owner_hash_code] = ['id' => $article['menu_id'], 'price' => 0, 'articles' => []];
-					}
-					$menus[$owner_hash_code]['price'] += round(round($article['pricelevel_unit_price'] * $article['qty_weight'], 2) - $article['price'], 2);
-					$menus[$owner_hash_code]['articles'][] = $hash_code;
-				}
-			}
-			$transactions[$trans_id]['menus'] = $menus;
-		}
+        //calcolo i menu
+        foreach ($transactions as $trans_id => $transaction) {
+            $menus = [];
+            foreach ($transaction['articles'] as $hash_code => $article) {
+                $owner_hash_code = $article['owner_hash_code'];
+                if ($owner_hash_code != '0') {
+                    if (!key_exists($owner_hash_code, $menus)) {
+                        $menus[$owner_hash_code] = ['id' => $article['menu_id'], 'price' => 0, 'articles' => []];
+                    }
+                    $menus[$owner_hash_code]['price'] += round(
+                        round($article['pricelevel_unit_price'] * $article['qty_weight'], 2) - $article['price'],
+                        2
+                    );
+                    $menus[$owner_hash_code]['articles'][] = $hash_code;
+                }
+            }
+            $transactions[$trans_id]['menus'] = $menus;
+        }
 
-		//calcolo gli sconti
-		$stmt = "	select t.id trans_id, td.discount_id, sum(td.amount) amount 
+        //calcolo gli sconti
+        $stmt = "	select t.id trans_id, td.discount_id, sum(td.amount) amount 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.trans_discounts td on t.id = td.transaction_id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null 
 					group by t.id, td.discount_id;";
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$trans_id = $row['trans_id'];
-			unset($row['trans_id']);
-			$transactions[$trans_id]['discounts'][] = $row;
-		}
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $trans_id = $row['trans_id'];
+            unset($row['trans_id']);
+            $transactions[$trans_id]['discounts'][] = $row;
+        }
 
-		//calcolo le promozioni
-		$stmt = "	select t.id trans_id, tp.promotion_id, sum(tp.discount + tp.amount + tp.offered_amount) amount 
+        //calcolo le promozioni
+        $stmt = "	select t.id trans_id, tp.promotion_id, sum(tp.discount + tp.amount + tp.offered_amount) amount 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.trans_promotions tp on tp.transaction_id = t.id 
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null
 					group by t.id, tp.promotion_id;";
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$trans_id = $row['trans_id'];
-			unset($row['trans_id']);
-			if ($row['amount'] <> 0) {
-				$transactions[$trans_id]['promotions'][] = $row;
-			}
-		}
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $trans_id = $row['trans_id'];
+            unset($row['trans_id']);
+            if ($row['amount'] <> 0) {
+                $transactions[$trans_id]['promotions'][] = $row;
+            }
+        }
 
-		//calcolo i punti
-		$stmt = "	select t.id trans_id, tpc.points_balance, tpc.points_gained, tpc.points_spent, tpc.points_used, pc.code, pc.description 
+        //calcolo i punti
+        $stmt = "	select t.id trans_id, tpc.points_balance, tpc.points_gained, tpc.points_spent, tpc.points_used, pc.code, pc.description 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 						join TCPOS4.dbo.trans_point_campaigns tpc on t.id = tpc.transaction_id 
@@ -365,16 +379,16 @@ class VTcp_transazioni
 						join TCPOS4.dbo.shops sh on t.shop_id =sh.id 
 					where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null;
 					";
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$trans_id = $row['trans_id'];
-			unset($row['trans_id']);
-			if (key_exists('points_balance', $row)) {
-				array_push($transactions[$trans_id]['points'], $row);
-			}
-		}
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $trans_id = $row['trans_id'];
+            unset($row['trans_id']);
+            if (key_exists('points_balance', $row)) {
+                array_push($transactions[$trans_id]['points'], $row);
+            }
+        }
 
-		$stmt = "select * from (
+        $stmt = "select * from (
 					select t.id trans_id, '4' payment_type, cc.card_number_ident payment_code,tp.amount payment_amount, tp.credit_card_num 
 					FROM TCPOS4.dbo.transactions t 
 						join TCPOS4.dbo.tills ts on t.till_id = ts.id 
@@ -412,24 +426,24 @@ class VTcp_transazioni
     			) as a
 				order by a.trans_id, a.payment_code";
 
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$trans_id = $row['trans_id'];
-			if (key_exists($trans_id, $transactions)) {
-				$payments = [];
-				if (key_exists('payments', $transactions[$trans_id])) {
-					$payments = $transactions[$trans_id]['payments'];
-				}
-				unset($row['trans_id']);
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $trans_id = $row['trans_id'];
+            if (key_exists($trans_id, $transactions)) {
+                $payments = [];
+                if (key_exists('payments', $transactions[$trans_id])) {
+                    $payments = $transactions[$trans_id]['payments'];
+                }
+                unset($row['trans_id']);
 
-				$payments[] = $row;
+                $payments[] = $row;
 
-				$transactions[$trans_id]['payments'] = $payments;
-			}
-		}
+                $transactions[$trans_id]['payments'] = $payments;
+            }
+        }
 
 
-		$stmt = "select t.id trans_id, case when tv.vat_id = 1 then 7 when tv.vat_id = 4 then 1 else tv.vat_id end vat_code, tv.vat_percent, tv.gross_amount, tv.net_amount, tv.vat_amount 
+        $stmt = "select t.id trans_id, case when tv.vat_id = 1 then 7 when tv.vat_id = 4 then 1 else tv.vat_id end vat_code, tv.vat_percent, tv.gross_amount, tv.net_amount, tv.vat_amount 
 				FROM TCPOS4.dbo.transactions t 
 					join TCPOS4.dbo.tills ts on t.till_id = ts.id 
 					join TCPOS4.dbo.shops sh on t.shop_id =sh.id
@@ -437,309 +451,337 @@ class VTcp_transazioni
 					join TCPOS4.dbo.trans_vats tv on t.id = tv.transaction_id 
 				where convert(DATE, t.trans_date) = '$data' $tillSearch and t.delete_timestamp is null";
 
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$trans_id = $row['trans_id'];
-			if (key_exists($trans_id, $transactions)) {
-				$transaction_vat = [];
-				if (key_exists('transaction_vat', $transactions[$trans_id])) {
-					$transaction_vat = $transactions[$trans_id]['transaction_vat'];
-				}
-				unset($row['trans_id']);
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $trans_id = $row['trans_id'];
+            if (key_exists($trans_id, $transactions)) {
+                $transaction_vat = [];
+                if (key_exists('transaction_vat', $transactions[$trans_id])) {
+                    $transaction_vat = $transactions[$trans_id]['transaction_vat'];
+                }
+                unset($row['trans_id']);
 
-				$transaction_vat[] = $row;
+                $transaction_vat[] = $row;
 
-				$transactions[$trans_id]['transaction_vat'] = $transaction_vat;
-			}
-		}
+                $transactions[$trans_id]['transaction_vat'] = $transaction_vat;
+            }
+        }
 
-		return json_encode($transactions);
-	}
+        return json_encode($transactions);
+    }
 
-	public function creazioneDatacollectEpipoli(array $request): string
-	{
+    public function creazioneDatacollectEpipoli(array $request): string
+    {
+        $codiceCampagna = '10501';
 
-		$codiceCampagna = '10501';
+        $codicePromozione = [
+            '3' => '990011425', //3-MENU KIDS 2020
+            '4' => '990011426', //4-MENU HAMBURGER 2020
+            '5' => '990011427', //5-MENU CLASSICO 2020
+            '8' => '990011428', //8-MENU PRIMO 2020
+            '12' => '990011429', //12-MENU SPECIALE 2020
+            '13' => '990011430', //13-MENU GOURMET 2020
+            '14' => '990011431', //14-MENU SECONDO DI CARNE 2020
+            '15' => '990011432', //15-MENU SECONDO DI PESCE 2020
+            '11' => '990011437' //11-MENU KIDS 2020
+        ];
 
-		$codicePromozione = [
-			'3' => '990011425', //3-MENU KIDS 2020
-			'4' => '990011426', //4-MENU HAMBURGER 2020
-			'5' => '990011427', //5-MENU CLASSICO 2020
-			'8' => '990011428', //8-MENU PRIMO 2020
-			'12' => '990011429', //12-MENU SPECIALE 2020
-			'13' => '990011430', //13-MENU GOURMET 2020
-			'14' => '990011431', //14-MENU SECONDO DI CARNE 2020
-			'15' => '990011432', //15-MENU SECONDO DI PESCE 2020
-			'11' => '990011437' //11-MENU KIDS 2020
-		];
+        //$dataCollectTcPos = $this->creazioneDatacollectTcPos( $request );
+        $dataCollectTcPos = file_get_contents('/Users/if65/Desktop/test/tcpos_20200729.json');
 
-		//$dataCollectTcPos = $this->creazioneDatacollectTcPos( $request );
-		$dataCollectTcPos = file_get_contents('/Users/if65/Desktop/test/tcpos_20200729.json');
+        $transactions = json_decode($dataCollectTcPos, true);
 
-		$transactions = json_decode($dataCollectTcPos, true);
+        $dc = [];
+        $numRec = 0;
+        $matches = [];
 
-		$dc = [];
-		$numRec = 0;
-		$matches = [];
+        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $request['data'], $matches)) {
+            $dataRiferimento = $matches[1] . $matches[2] . $matches[3];
 
-		if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $request['data'], $matches)) {
-			$dataRiferimento = $matches[1] . $matches[2] . $matches[3];
+            foreach ($transactions as $transaction) {
+                if ($transaction['trans_num'] == '0011') {
+                    echo "\n";
+                }
+                $ora = '';
+                if (preg_match('/^.{10}T(\d{2}):(\d{2}):(\d{2})$/', $transaction['trans_date'], $matches)) {
+                    $ora = $matches[1] . $matches[2];
+                }
+                $cardNum = '';
+                if ($transaction['card_num'] != null) {
+                    $cardNum = $transaction['card_num'];
+                }
+                $dc[] = sprintf(
+                    '%08s%08d%-5s004%04d%04d%06d%08d%04s%13s%1s%45s',
+                    $dataRiferimento,
+                    ++$numRec,
+                    '0500',//$request['sede'],
+                    $transaction['trans_num'],
+                    $transaction['till_code'],
+                    $transaction['operator_code'],
+                    $dataRiferimento,
+                    $ora,
+                    $cardNum,
+                    0,
+                    ''
+                );
 
-			foreach ($transactions as $transaction) {
-				if ($transaction['trans_num'] == '0011') {
-					echo "\n";
-				}
-				$ora = '';
-				if (preg_match('/^.{10}T(\d{2}):(\d{2}):(\d{2})$/', $transaction['trans_date'], $matches)) {
-					$ora = $matches[1] . $matches[2];
-				}
-				$cardNum = '';
-				if ($transaction['card_num'] != null) {
-					$cardNum = $transaction['card_num'];
-				}
-				$dc[] = sprintf('%08s%08d%-5s004%04d%04d%06d%08d%04s%13s%1s%45s',
-					$dataRiferimento,
-					++$numRec,
-					'0500',//$request['sede'],
-					$transaction['trans_num'],
-					$transaction['till_code'],
-					$transaction['operator_code'],
-					$dataRiferimento,
-					$ora,
-					$cardNum,
-					0,
-					''
-				);
+                // vendita
+                foreach ($transaction['articles'] as $article) {
+                    if ($article['article_price'] <> 0) {
+                        $totaleBuoniPasto = 0;
+                        if ($article['article_code'] == '0000-0001' or $article['article_code'] == '0000-0001') {
+                            $totaleBuoniPasto += round($article['article_price'], 2);
+                        }
+                        $prezzo = round(
+                            $article['article_price'] + $article['price_article_menu_addition'] + $article['discount'],
+                            2
+                        );
+                        $prezzoListino = round($article['article_catalog_price_unit'] * $article['quantity'], 2);
+                        $sconto = 0;
+                        if (round($prezzoListino - $prezzo, 2) and ($article['menu_id'] != null)) {
+                            $sconto = round($prezzoListino - $prezzo, 2);
+                        } else {
+                            $prezzoListino = $prezzo;
+                        }
 
-				// vendita
-				foreach ($transaction['articles'] as $article) {
+                        $dc[] = sprintf(
+                            '%08s%08s%-5s1001%13s%1s%4s%09d%1d%09d%9s%9s%02d%-10s%13s%1d   ',
+                            $dataRiferimento,
+                            ++$numRec,
+                            '0500',//$request['sede'],
+                            $article['article_barcode'],
+                            'N',
+                            '',
+                            round(round($prezzoListino, 2) * 100, 0),
+                            0,
+                            round($article['quantity'] * 1000, 0),
+                            '',
+                            '',
+                            0,
+                            $article['article_code'],
+                            '',
+                            0
+                        );
 
+                        if ($sconto != 0) {
+                            $dc[] = sprintf(
+                                '%08s%08s%-5s1091%13s%1s%4s%09d%1d%09d%-9s%9s%02d%-10s%13s%1d   ',
+                                $dataRiferimento,
+                                ++$numRec,
+                                '0500',//$request['sede'],
+                                $article['article_barcode'],
+                                'N',
+                                '',
+                                round($sconto * 100, 0),
+                                0,
+                                round(0, 0),
+                                $codiceCampagna,
+                                ($article['menu_id'] != null) ? $codicePromozione[$article['menu_id']] : '',
+                                0,
+                                '',
+                                '',
+                                0
+                            );
+                        }
+                    }
+                }
+                // punti transazione
+                foreach ($transaction['points'] as $point) {
+                    $dc[] = sprintf(
+                        '%08s%08s%-5s1077%18s%09d%1d%09d%-9s%9s%02d%-10s%13s%1d',
+                        $dataRiferimento,
+                        ++$numRec,
+                        '0500',//$request['sede'],
+                        '',
+                        round($point['points_gained'] - $point['points_used'], 0),
+                        0,
+                        0,
+                        10485,
+                        990011267,
+                        0,
+                        '',
+                        '',
+                        0
+                    );
+                }
 
-					if ($article['article_price'] <> 0) {
+                // chiusura transazione
+                $dc[] = sprintf(
+                    '%08s%08s%-5s1020%18s%09d%1d%09d%9s%9s%02d%-10s%13s%1d   ',
+                    $dataRiferimento,
+                    ++$numRec,
+                    '0500',//$request['sede'],
+                    '',
+                    round(($transaction['total_amount'] - $totaleBuoniPasto) * 100, 0),
+                    0,
+                    0,
+                    '',
+                    '',
+                    0,
+                    '',
+                    '',
+                    0
+                );
+            }
+        }
 
-						$totaleBuoniPasto = 0;
-						if ($article['article_code'] == '0000-0001' or $article['article_code'] == '0000-0001') {
-							$totaleBuoniPasto += round($article['article_price'], 2);
-						}
-						$prezzo = round($article['article_price'] + $article['price_article_menu_addition'] + $article['discount'], 2);
-						$prezzoListino = round($article['article_catalog_price_unit'] * $article['quantity'], 2);
-						$sconto = 0;
-						if (round($prezzoListino - $prezzo, 2) and ($article['menu_id'] != null)) {
-							$sconto = round($prezzoListino - $prezzo, 2);
-						} else {
-							$prezzoListino = $prezzo;
-						}
+        return implode("\r\n", $dc) . "\r\n";
+    }
 
-						$dc[] = sprintf('%08s%08s%-5s1001%13s%1s%4s%09d%1d%09d%9s%9s%02d%-10s%13s%1d   ',
-							$dataRiferimento,
-							++$numRec,
-							'0500',//$request['sede'],
-							$article['article_barcode'],
-							'N',
-							'',
-							round(round($prezzoListino, 2) * 100, 0),
-							0,
-							round($article['quantity'] * 1000, 0),
-							'',
-							'',
-							0,
-							$article['article_code'],
-							'',
-							0
-						);
+    public function creazioneDatacollectRiepvegi(array $request): string
+    {
+        $dataCollectTcPos = $this->creazioneDatacollectTcPos($request);
 
-						if ($sconto != 0) {
-							$dc[] = sprintf('%08s%08s%-5s1091%13s%1s%4s%09d%1d%09d%-9s%9s%02d%-10s%13s%1d   ',
-								$dataRiferimento,
-								++$numRec,
-								'0500',//$request['sede'],
-								$article['article_barcode'],
-								'N',
-								'',
-								round($sconto * 100, 0),
-								0,
-								round(0, 0),
-								$codiceCampagna,
-								($article['menu_id'] != null) ? $codicePromozione[$article['menu_id']] : '',
-								0,
-								'',
-								'',
-								0
-							);
-						}
+        $transactions = json_decode($dataCollectTcPos, true);
 
-					}
-				}
-				// punti transazione
-				foreach ($transaction['points'] as $point) {
-					$dc[] = sprintf('%08s%08s%-5s1077%18s%09d%1d%09d%-9s%9s%02d%-10s%13s%1d',
-						$dataRiferimento,
-						++$numRec,
-						'0500',//$request['sede'],
-						'',
-						round($point['points_gained'] - $point['points_used'], 0),
-						0,
-						0,
-						10485,
-						990011267,
-						0,
-						'',
-						'',
-						0
-					);
-				}
+        $result = [];
+        foreach ($transactions as $transaction) {
+            foreach ($transaction['articles'] as $article) {
+                $quantita = round($article['quantity'], 2);
+                $venduto_alle_casse = round(
+                    $article['article_price'] + $article['price_article_menu_addition'] + $article['discount'],
+                    2
+                );
 
-				// chiusura transazione
-				$dc[] = sprintf('%08s%08s%-5s1020%18s%09d%1d%09d%9s%9s%02d%-10s%13s%1d   ', $dataRiferimento,
-					++$numRec,
-					'0500',//$request['sede'],
-					'',
-					round(($transaction['total_amount'] - $totaleBuoniPasto) * 100, 0),
-					0,
-					0,
-					'',
-					'',
-					0,
-					'',
-					'',
-					0
-				);
-			}
-		}
+                $venduto_a_listino = round($article['article_catalog_price_unit'] * $quantita, 2);
+                $articolo_in_offerta = false;
+                if (round(
+                        $article['article_price'] + $article['price_article_menu_addition'] - $venduto_a_listino,
+                        2
+                    ) != 0.00) {
+                    $articolo_in_offerta = true;
+                }
+                $articolo_in_sconto = false;
+                if (round($article['discount'], 2) != 0.00) {
+                    $articolo_in_sconto = true;
+                }
 
-		return implode("\r\n", $dc) . "\r\n";
-	}
+                if (key_exists($article['article_code'], $result)) {
+                    $selectedArticle = $result[$article['article_code']];
 
-	public function creazioneDatacollectRiepvegi(array $request): string
-	{
-		$dataCollectTcPos = $this->creazioneDatacollectTcPos($request);
+                    $selectedArticle['quantita'] += $quantita;
+                    $selectedArticle['quantita_in_offerta'] += ($articolo_in_offerta) ? $quantita : 0.00;
+                    $selectedArticle['quantita_in_sconto'] += ($articolo_in_sconto) ? $quantita : 0.00;
+                    $selectedArticle['venduto'] = round($selectedArticle['venduto'] + $venduto_alle_casse, 2);
+                    $selectedArticle['venduto_in_offerta'] = round(
+                        $selectedArticle['venduto_in_offerta'] + (($articolo_in_offerta) ? round(
+                            $venduto_alle_casse,
+                            2
+                        ) : 0.00),
+                        2
+                    );
+                    $selectedArticle['venduto_in_sconto'] = round(
+                        $selectedArticle['venduto_in_sconto'] + (($articolo_in_sconto) ? round(
+                            $article['discount'],
+                            2
+                        ) : 0.00),
+                        2
+                    );
+                    $selectedArticle['venduto_a_listino'] = round(
+                        $selectedArticle['venduto_a_listino'] + round($venduto_a_listino, 2),
+                        2
+                    );
 
-		$transactions = json_decode($dataCollectTcPos, true);
+                    $result[$article['article_code']] = $selectedArticle;
+                } else {
+                    $result[$article['article_code']] = [
+                        'sede' => $request['sede'],
+                        'data' => $request['data'],
+                        'quantita' => $quantita,
+                        'quantita_in_offerta' => ($articolo_in_offerta) ? $quantita : 0.00,
+                        'quantita_in_sconto' => ($articolo_in_sconto) ? $quantita : 0.00,
+                        'venduto' => $venduto_alle_casse,
+                        'venduto_in_offerta' => ($articolo_in_offerta) ? $venduto_alle_casse : 0.00,
+                        'venduto_in_sconto' => ($articolo_in_sconto) ? round($article['discount'], 2) : 0.00,
+                        'venduto_a_listino' => $venduto_a_listino,
+                    ];
+                }
+            }
+        }
 
-		$result = [];
-		foreach ($transactions as $transaction) {
-			foreach ($transaction['articles'] as $article) {
-				$quantita = round($article['quantity'], 2);
-				$venduto_alle_casse = round($article['article_price'] + $article['price_article_menu_addition'] + $article['discount'], 2);
+        return json_encode($result);
+    }
 
-				$venduto_a_listino = round($article['article_catalog_price_unit'] * $quantita, 2);
-				$articolo_in_offerta = false;
-				if (round($article['article_price'] + $article['price_article_menu_addition'] - $venduto_a_listino, 2) != 0.00) {
-					$articolo_in_offerta = true;
-				}
-				$articolo_in_sconto = false;
-				if (round($article['discount'], 2) != 0.00) {
-					$articolo_in_sconto = true;
-				}
+    public function creazioneDatacollectRiepvegiTxt(array $request, string $dati): string
+    {
+        $societa = '';
+        $negozio = '';
+        if (preg_match('/^(\d\d)(\d\d)$/', $request['sede'], $matches)) {
+            $societa = $matches[1];
+            $negozio = $matches[2];
+        }
 
-				if (key_exists($article['article_code'], $result)) {
-					$selectedArticle = $result[$article['article_code']];
+        $data = $request['data'];
+        $giorno = '';
+        $mese = '';
+        $anno = '';
+        if (preg_match('/^\d\d(\d\d)\-(\d\d)\-(\d\d)$/', $request['data'], $matches)) {
+            $anno = $matches[1];
+            $mese = $matches[2];
+            $giorno = $matches[3];
+        }
+        $datacollect = json_decode($dati, true);
 
-					$selectedArticle['quantita'] += $quantita;
-					$selectedArticle['quantita_in_offerta'] += ($articolo_in_offerta) ? $quantita : 0.00;
-					$selectedArticle['quantita_in_sconto'] += ($articolo_in_sconto) ? $quantita : 0.00;
-					$selectedArticle['venduto'] = round($selectedArticle['venduto'] + $venduto_alle_casse, 2);
-					$selectedArticle['venduto_in_offerta'] = round($selectedArticle['venduto_in_offerta'] + (($articolo_in_offerta) ? round($venduto_alle_casse, 2) : 0.00), 2);
-					$selectedArticle['venduto_in_sconto'] = round($selectedArticle['venduto_in_sconto'] + (($articolo_in_sconto) ? round($article['discount'], 2) : 0.00), 2);
-					$selectedArticle['venduto_a_listino'] = round($selectedArticle['venduto_a_listino'] + round($venduto_a_listino, 2), 2);
+        $riepvegi = [];
+        foreach ($datacollect as $code => $article) {
+            $row = '';
+            $row .= $societa . "\t";
+            $row .= $negozio . "\t";
+            $row .= $code . "\t";
+            $row .= (key_exists('barcode', $article) ? $article['barcode'] : '') . "\t";
+            $row .= $data . "\t";
+            $row .= $anno . "\t";
+            $row .= $mese . "\t";
+            $row .= $giorno . "\t";
+            $row .= $article['quantita'] . "\t";
+            $row .= $article['quantita_in_offerta'] . "\t";
+            $row .= $article['quantita_in_sconto'] . "\t";
+            $row .= "0.00" . "\t";
+            $row .= "0.00" . "\t";
+            $row .= "0.00" . "\t";
+            $row .= "0.00" . "\t";
+            $row .= "0.00" . "\t";
+            $row .= 'L' . "\t"; // segno tipo prezzo
+            $row .= '0' . "\t"; // forzaprezzo
+            $row .= '' . "\t"; //segno
+            $row .= '' . "\t";//segno
+            $row .= '' . "\t";//segno
+            $row .= '' . "\t";//segno
+            $row .= "0.00" . "\t";//filler
+            $row .= $article['venduto'] . "\t";
+            $row .= $article['venduto_a_listino'] . "\t";
+            $row .= $article['venduto'] . "\t";
+            $row .= $article['venduto_in_offerta'] . "\t";
+            $row .= abs($article['venduto_in_sconto']) . "\t";
+            $row .= '' . "\t";
+            $row .= '' . "\t";
+            $row .= '' . "\t";
+            $row .= '' . "\t";
+            $row .= '' . "\t";
+            $row .= '' . "\t";
+            $row .= '' . "\t";
+            $row .= '';
 
-					$result[$article['article_code']] = $selectedArticle;
-				} else {
-					$result[$article['article_code']] = [
-						'sede' => $request['sede'],
-						'data' => $request['data'],
-						'quantita' => $quantita,
-						'quantita_in_offerta' => ($articolo_in_offerta) ? $quantita : 0.00,
-						'quantita_in_sconto' => ($articolo_in_sconto) ? $quantita : 0.00,
-						'venduto' => $venduto_alle_casse,
-						'venduto_in_offerta' => ($articolo_in_offerta) ? $venduto_alle_casse : 0.00,
-						'venduto_in_sconto' => ($articolo_in_sconto) ? round($article['discount'], 2) : 0.00,
-						'venduto_a_listino' => $venduto_a_listino,
-					];
-				}
-			}
-		}
+            $riepvegi[] = $row;
+        }
 
-		return json_encode($result);
-	}
+        return implode("\n", $riepvegi) . "\n";
+    }
 
-	public function creazioneDatacollectRiepvegiTxt(array $request, string $dati): string
-	{
+    public function incassiInTempoReale(array $request): array
+    {
+        $data = $request['data'];
 
-		$societa = '';
-		$negozio = '';
-		if (preg_match('/^(\d\d)(\d\d)$/', $request['sede'], $matches)) {
-			$societa = $matches[1];
-			$negozio = $matches[2];
-		}
+        $conn = new \PDO(
+            "sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname,
+            $this->username,
+            $this->password
+        );
 
-		$data = $request['data'];
-		$giorno = '';
-		$mese = '';
-		$anno = '';
-		if (preg_match('/^\d\d(\d\d)\-(\d\d)\-(\d\d)$/', $request['data'], $matches)) {
-			$anno = $matches[1];
-			$mese = $matches[2];
-			$giorno = $matches[3];
-		}
-		$datacollect = json_decode($dati, true);
+        $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $conn->setAttribute(\PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10);
 
-		$riepvegi = [];
-		foreach ($datacollect as $code => $article) {
-			$row = '';
-			$row .= $societa . "\t";
-			$row .= $negozio . "\t";
-			$row .= $code . "\t";
-			$row .= (key_exists('barcode', $article) ? $article['barcode'] : '') . "\t";
-			$row .= $data . "\t";
-			$row .= $anno . "\t";
-			$row .= $mese . "\t";
-			$row .= $giorno . "\t";
-			$row .= $article['quantita'] . "\t";
-			$row .= $article['quantita_in_offerta'] . "\t";
-			$row .= $article['quantita_in_sconto'] . "\t";
-			$row .= "0.00" . "\t";
-			$row .= "0.00" . "\t";
-			$row .= "0.00" . "\t";
-			$row .= "0.00" . "\t";
-			$row .= "0.00" . "\t";
-			$row .= 'L' . "\t"; // segno tipo prezzo
-			$row .= '0' . "\t"; // forzaprezzo
-			$row .= '' . "\t"; //segno
-			$row .= '' . "\t";//segno
-			$row .= '' . "\t";//segno
-			$row .= '' . "\t";//segno
-			$row .= "0.00" . "\t";//filler
-			$row .= $article['venduto'] . "\t";
-			$row .= $article['venduto_a_listino'] . "\t";
-			$row .= $article['venduto'] . "\t";
-			$row .= $article['venduto_in_offerta'] . "\t";
-			$row .= abs($article['venduto_in_sconto']) . "\t";
-			$row .= '' . "\t";
-			$row .= '' . "\t";
-			$row .= '' . "\t";
-			$row .= '' . "\t";
-			$row .= '' . "\t";
-			$row .= '' . "\t";
-			$row .= '' . "\t";
-			$row .= '';
-
-			$riepvegi[] = $row;
-		}
-
-		return implode("\n", $riepvegi) . "\n";
-	}
-
-	public function incassiInTempoReale(array $request): array
-	{
-		$data = $request['data'];
-
-		$conn = new \PDO("sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname, $this->username, $this->password);
-
-		$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-		$conn->setAttribute(\PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10);
-
-		$stmt = "SELECT 
+        $stmt = "SELECT 
 				    case 
 				        when left(sh.code, 4) = '0600' then '0502' 	
 				        when left(sh.code, 4) = '0700' then '0503' 
@@ -761,26 +803,32 @@ class VTcp_transazioni
 				    end,
     				convert(DATE, t.trans_date)";
 
-		$result = [];
-		$stmt = $conn->query($stmt);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			$result[] = $row;
-		}
+        $result = [];
+        $stmt = $conn->query($stmt);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $result[] = $row;
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	public function recuperaFatture(): string
-	{
-		try {
-			$conn = new \PDO("sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname, $this->username, $this->password);
+    public function recuperaFatture(): string
+    {
+        try {
+            $conn = new \PDO(
+                "sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname,
+                $this->username,
+                $this->password
+            );
 
-			$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			$conn->setAttribute(\PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10);
+            $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $conn->setAttribute(\PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10);
 
-			$conn->query("update TCPOS4.dbo.transactions set exported = 10 where fiscal_invoice is not NULL and exported = 0;");
+            $conn->query(
+                "update TCPOS4.dbo.transactions set exported = 10 where fiscal_invoice is not NULL and exported = 0;"
+            );
 
-			$sql = "    select 
+            $sql = "    select 
                         t.id,
                         case 
                             when left(s.code, 4) = '0500' then '0501'
@@ -812,46 +860,110 @@ class VTcp_transazioni
                         join TCPOS4.dbo.tills t2 on t.till_id = t2.id 
                     where t.fiscal_invoice is not NULL and t.exported = 10;";
 
-			$fatture = [];
-			$stmt = $conn->query($sql);
-			while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-				$row['rows'] = [];
-				$row['vats'] = [];
-				$row['payments'] = [];
-				if ($row['shop_code'] == '0501') {
-					$row['invoice_num'] = '51-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0502') {
-					$row['invoice_num'] = '52-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0503') {
-					$row['invoice_num'] = '53-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0201') {
-					$row['invoice_num'] = '51-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0155') {
-					$row['invoice_num'] = '52-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0142') {
-					$row['invoice_num'] = '53-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0203') {
-					$row['invoice_num'] = '54-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0132') {
-					$row['invoice_num'] = '55-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0148') {
-					$row['invoice_num'] = '56-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0115') {
-					$row['invoice_num'] = '57-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0204') {
-					$row['invoice_num'] = '58-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0101') {
-					$row['invoice_num'] = '59-' . $row['invoice_num'];
-				} elseif ($row['shop_code'] == '0205') {
-					$row['invoice_num'] = '60-' . $row['invoice_num'];
-				} else {
-					$row['invoice_num'] = '00-' . $row['invoice_num'];
-				}
-				$fatture[$row['id']] = $row;
-			}
+            $fatture = [];
+            $stmt = $conn->query($sql);
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $row['rows'] = [];
+                $row['vats'] = [];
+                $row['payments'] = [];
+                if ($row['shop_code'] == '0501') {
+                    $row['invoice_num'] = '51-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0502') {
+                    $row['invoice_num'] = '52-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0503') {
+                    $row['invoice_num'] = '53-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0201') {
+                    $row['invoice_num'] = '51-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0155') {
+                    $row['invoice_num'] = '52-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0142') {
+                    $row['invoice_num'] = '53-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0203') {
+                    $row['invoice_num'] = '54-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0132') {
+                    $row['invoice_num'] = '55-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0148') {
+                    $row['invoice_num'] = '56-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0115') {
+                    $row['invoice_num'] = '57-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0204') {
+                    $row['invoice_num'] = '58-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0101') {
+                    $row['invoice_num'] = '59-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0205') {
+                    $row['invoice_num'] = '60-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0104') {
+                    $row['invoice_num'] = '61-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0108') {
+                    $row['invoice_num'] = '62-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0110') {
+                    $row['invoice_num'] = '63-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0114') {
+                    $row['invoice_num'] = '64-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0119') {
+                    $row['invoice_num'] = '65-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0124') {
+                    $row['invoice_num'] = '66-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0125') {
+                    $row['invoice_num'] = '67-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0127') {
+                    $row['invoice_num'] = '68-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0128') {
+                    $row['invoice_num'] = '69-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0129') {
+                    $row['invoice_num'] = '70-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0131') {
+                    $row['invoice_num'] = '71-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0133') {
+                    $row['invoice_num'] = '72-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0139') {
+                    $row['invoice_num'] = '73-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0140') {
+                    $row['invoice_num'] = '74-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0141') {
+                    $row['invoice_num'] = '75-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0143') {
+                    $row['invoice_num'] = '76-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0171') {
+                    $row['invoice_num'] = '77-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0172') {
+                    $row['invoice_num'] = '78-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0173') {
+                    $row['invoice_num'] = '79-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0176') {
+                    $row['invoice_num'] = '93-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0177') {
+                    $row['invoice_num'] = '94-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0178') {
+                    $row['invoice_num'] = '82-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '3151') {
+                    $row['invoice_num'] = '83-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '3152') {
+                    $row['invoice_num'] = '84-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '3661') {
+                    $row['invoice_num'] = '85-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '3673') {
+                    $row['invoice_num'] = '86-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '3682') {
+                    $row['invoice_num'] = '87-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '3693') {
+                    $row['invoice_num'] = '88-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '3694') {
+                    $row['invoice_num'] = '89-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0188') {
+                    $row['invoice_num'] = '90-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0190') {
+                    $row['invoice_num'] = '91-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0202') {
+                    $row['invoice_num'] = '92-' . $row['invoice_num'];
+                } else {
+                    $row['invoice_num'] = '00-' . $row['invoice_num'];
+                }
+                $fatture[$row['id']] = $row;
+            }
 
 
-			$sql = "    select 
+            $sql = "    select 
                         t.id,
                         ta.hash_code, 
                         a.code,
@@ -874,21 +986,21 @@ class VTcp_transazioni
                     where t.fiscal_invoice is not NULL and ta.delete_timestamp is null and t.exported = 10
                     order by t.id, ta.hash_code;";
 
-			$stmt = $conn->query($sql);
-			while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-				if (key_exists($row['id'], $fatture)) {
-					$row['amount'] *= 1;
-					$row['vat_percent'] *= 1;
-					$row['qty_weight'] *= 1;
-					$net_amount = round($row['amount'] / ($row['vat_percent'] + 100) * 100, 2);
-					$vat_amount = round($row['amount'] - $net_amount, 2);
-					$row['vat_amount'] = $vat_amount;
-					$row['net_amount'] = $net_amount;
-					$fatture[$row['id']]['rows'][] = $row;
-				}
-			}
+            $stmt = $conn->query($sql);
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                if (key_exists($row['id'], $fatture)) {
+                    $row['amount'] *= 1;
+                    $row['vat_percent'] *= 1;
+                    $row['qty_weight'] *= 1;
+                    $net_amount = round($row['amount'] / ($row['vat_percent'] + 100) * 100, 2);
+                    $vat_amount = round($row['amount'] - $net_amount, 2);
+                    $row['vat_amount'] = $vat_amount;
+                    $row['net_amount'] = $net_amount;
+                    $fatture[$row['id']]['rows'][] = $row;
+                }
+            }
 
-			$sql = "    select 
+            $sql = "    select 
                         t.id,
                         case 
                             when v.id = 1 then 7
@@ -907,15 +1019,15 @@ class VTcp_transazioni
                         join TCPOS4.dbo.vats v on tv.vat_id = v.id 
                     where t.fiscal_invoice is not NULL and t.exported = 10;";
 
-			$stmt = $conn->query($sql);
-			while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-				if (key_exists($row['id'], $fatture)) {
-					$fatture[$row['id']]['vats'][] = $row;
-				}
-			}
+            $stmt = $conn->query($sql);
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                if (key_exists($row['id'], $fatture)) {
+                    $fatture[$row['id']]['vats'][] = $row;
+                }
+            }
 
 
-			$sql = "    select 
+            $sql = "    select 
                         t.id,
                         tp.amount,
                         p.code payment_code,
@@ -925,14 +1037,14 @@ class VTcp_transazioni
                         join payments p on tp.payment_id = p.id
                     where t.fiscal_invoice is not NULL and t.exported = 10;";
 
-			$stmt = $conn->query($sql);
-			while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-				if (key_exists($row['id'], $fatture)) {
-					$fatture[$row['id']]['payments'][] = $row;
-				}
-			}
+            $stmt = $conn->query($sql);
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                if (key_exists($row['id'], $fatture)) {
+                    $fatture[$row['id']]['payments'][] = $row;
+                }
+            }
 
-			$sql = "    select 
+            $sql = "    select 
                         t.id,
                         sum(tv.vat_amount ) vat_amount,
                         sum(tv.net_amount ) net_amount,
@@ -942,196 +1054,242 @@ class VTcp_transazioni
                     where t.fiscal_invoice is not NULL and t.exported = 10
                     group by t.id;";
 
-			$stmt = $conn->query($sql);
-			while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-				if (key_exists($row['id'], $fatture)) {
-					$fatture[$row['id']]['vat_amount'] = $row['vat_amount'] * 1;
-					$fatture[$row['id']]['net_amount'] = $row['net_amount'] * 1;
-					$fatture[$row['id']]['gross_amount'] = $row['gross_amount'] * 1;
-				}
-			}
+            $stmt = $conn->query($sql);
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                if (key_exists($row['id'], $fatture)) {
+                    $fatture[$row['id']]['vat_amount'] = $row['vat_amount'] * 1;
+                    $fatture[$row['id']]['net_amount'] = $row['net_amount'] * 1;
+                    $fatture[$row['id']]['gross_amount'] = $row['gross_amount'] * 1;
+                }
+            }
 
-			$conn->query("update TCPOS4.dbo.transactions set exported = 20 where fiscal_invoice is not NULL and exported = 10;");
+            $conn->query(
+                "update TCPOS4.dbo.transactions set exported = 20 where fiscal_invoice is not NULL and exported = 10;"
+            );
 
-			return json_encode($fatture);
-		} catch (PDOException $e) {
-			return '';
-		}
-	}
+            return json_encode($fatture);
+        } catch (PDOException $e) {
+            return '';
+        }
+    }
 
-	public function creaFileInterscambioFatture(string $fattureJson): string
-	{
-		$fatture = json_decode($fattureJson, true);
+    public function creaFileInterscambioFatture(string $fattureJson): string
+    {
+        $fatture = json_decode($fattureJson, true);
 
-		$righe = [];
-		$contatore = 0;
-		foreach ($fatture as $id => $fattura) {
-			$codiceSocietaEmittente = '02';
-			$ragioneSocialeSocietaEmittente = 'ITALMARK S.R.L.';
-			$partitaIvaSocietaEmittente = '04145590982';
-			if ($fattura['shop_code'] == '0501') {
-				$codiceSocietaEmittente = '05';
-				$ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
-				$partitaIvaSocietaEmittente = '04130570981';
-			} elseif ($fattura['shop_code'] == '0502') {
-				$codiceSocietaEmittente = '05';
-				$ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
-				$partitaIvaSocietaEmittente = '04130570981';
-			} elseif ($fattura['shop_code'] == '0503') {
-				$codiceSocietaEmittente = '05';
-				$ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
-				$partitaIvaSocietaEmittente = '04130570981';
-			};
+        $righe = [];
+        $contatore = 0;
+        foreach ($fatture as $id => $fattura) {
+            $codiceSocietaEmittente = '02';
+            $ragioneSocialeSocietaEmittente = 'ITALMARK S.R.L.';
+            $partitaIvaSocietaEmittente = '04145590982';
+            if ($fattura['shop_code'] == '0501') {
+                $codiceSocietaEmittente = '05';
+                $ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
+                $partitaIvaSocietaEmittente = '04130570981';
+            } elseif ($fattura['shop_code'] == '0502') {
+                $codiceSocietaEmittente = '05';
+                $ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
+                $partitaIvaSocietaEmittente = '04130570981';
+            } elseif ($fattura['shop_code'] == '0503') {
+                $codiceSocietaEmittente = '05';
+                $ragioneSocialeSocietaEmittente = 'IT\'S MARKET S.R.L.';
+                $partitaIvaSocietaEmittente = '04130570981';
+            };
 
-			$righe[] = sprintf('%s;%s;%04d;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%d;%d;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;',
-				'100', // tipo record
-				$fattura['invoice_num'], // numero fattura
-				++$contatore, // progressivo
-				str_replace('-', '', $fattura['invoice_date']), // data fattura
-				$codiceSocietaEmittente, // codice società emittente
-				$ragioneSocialeSocietaEmittente, // ragione sociale emittente
-				$partitaIvaSocietaEmittente, // partita iva emittente
-				'', // codice societa destinataria (qc_ced_clienti)
-				trim(trim($fattura['name'], " \t\n\r\0\x0B") . ' ' . trim($fattura['surname'], " \t\n\r\0\x0B")), // ragione sociale destinatario
-				trim($fattura['fiscal_code'], " \t\n\r\0\x0B"), // codice fiscale destinatario
-				trim($fattura['fiscal_vat_number'], " \t\n\r\0\x0B"), // partita iva destinatario
-				'', // codice rapporto cliente
-				'', // codice cliente
-				0, // split payment
-				0, // pubblica amministrazione
-				'TD01', // tipo documento
-				'EUR', // divisa
-				'', // codice commessa convenzionale
-				trim($fattura['sdi_identification'], " \t\n\r\0\x0B"), // codice CUP
-				'', // codice CIG
-				$fattura['shop_code'], // codice negozio emittente
-				trim($fattura['taxres_street'], " \t\n\r\0\x0B"), // indirizzo cliente
-				trim($fattura['taxres_ZIP'], " \t\n\r\0\x0B"), // cap cliente
-				trim($fattura['taxres_city'], " \t\n\r\0\x0B"), // città cliente
-				trim($fattura['taxres_district'], " \t\n\r\0\x0B"), // provincia cliente
-				trim($fattura['taxres_country'], " \t\n\r\0\x0B"), // stato cliente
-				'0000000', // codice destinatario
-				'', // tipo movimento coge mitico
-				'', // conto ricavo mitico
-				'', // tipo ritenuta
-				'', // importo ritenuta
-				'', // aliquota ritenuta
-				'', // causale pagamento ritenuta
-				'', // convenzione id documento
-				'' // data conv id documento
-			);
+            $righe[] = sprintf(
+                '%s;%s;%04d;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%d;%d;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;',
+                '100',
+                // tipo record
+                $fattura['invoice_num'],
+                // numero fattura
+                ++$contatore,
+                // progressivo
+                str_replace('-', '', $fattura['invoice_date']),
+                // data fattura
+                $codiceSocietaEmittente,
+                // codice società emittente
+                $ragioneSocialeSocietaEmittente,
+                // ragione sociale emittente
+                $partitaIvaSocietaEmittente,
+                // partita iva emittente
+                '',
+                // codice societa destinataria (qc_ced_clienti)
+                trim(trim($fattura['name'], " \t\n\r\0\x0B") . ' ' . trim($fattura['surname'], " \t\n\r\0\x0B")),
+                // ragione sociale destinatario
+                trim($fattura['fiscal_code'], " \t\n\r\0\x0B"),
+                // codice fiscale destinatario
+                trim($fattura['fiscal_vat_number'], " \t\n\r\0\x0B"),
+                // partita iva destinatario
+                '',
+                // codice rapporto cliente
+                '',
+                // codice cliente
+                0,
+                // split payment
+                0,
+                // pubblica amministrazione
+                'TD01',
+                // tipo documento
+                'EUR',
+                // divisa
+                '',
+                // codice commessa convenzionale
+                trim($fattura['sdi_identification'], " \t\n\r\0\x0B"),
+                // codice CUP
+                '',
+                // codice CIG
+                $fattura['shop_code'],
+                // codice negozio emittente
+                trim($fattura['taxres_street'], " \t\n\r\0\x0B"),
+                // indirizzo cliente
+                trim($fattura['taxres_ZIP'], " \t\n\r\0\x0B"),
+                // cap cliente
+                trim($fattura['taxres_city'], " \t\n\r\0\x0B"),
+                // città cliente
+                trim($fattura['taxres_district'], " \t\n\r\0\x0B"),
+                // provincia cliente
+                trim($fattura['taxres_country'], " \t\n\r\0\x0B"),
+                // stato cliente
+                '0000000',
+                // codice destinatario
+                '',
+                // tipo movimento coge mitico
+                '',
+                // conto ricavo mitico
+                '',
+                // tipo ritenuta
+                '',
+                // importo ritenuta
+                '',
+                // aliquota ritenuta
+                '',
+                // causale pagamento ritenuta
+                '',
+                // convenzione id documento
+                '' // data conv id documento
+            );
 
-			$righe[] = sprintf('%s;%s;%04d;%s;',
-				'300', // tipo record
-				$fattura['invoice_num'], // numero fattura
-				++$contatore, // progressivo
-				'' // causale campo libero
-			);
+            $righe[] = sprintf(
+                '%s;%s;%04d;%s;',
+                '300', // tipo record
+                $fattura['invoice_num'], // numero fattura
+                ++$contatore, // progressivo
+                '' // causale campo libero
+            );
 
-			foreach ($fattura['rows'] as $riga) {
-				$righe[] = sprintf('%s;%s;%04d;%s;%s;%s;%s;%s;%s;%s;%s;%.2f;%.2f;%.2f;%d;%s;%s;%.2f;%.2f;%.2f;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;',
-					'500', // tipo record
-					$fattura['invoice_num'], // numero fattura
-					++$contatore, // progressivo
-					'codice interno', // tipo codice 1
-					$riga['code'], // valore codice 1
-					'', // tipo codice 2
-					'', // valore codice 2
-					'', // tipo codice 3
-					'', // valore codice 3
-					$riga['description'], // descrizione articolo
-					'', // unità misura articolo
-					$riga['qty_weight'], // quantita
-					$riga['qty_weight'] != 0.00 ? $riga['amount'] / $riga['qty_weight'] : 0.00, // prezzo unitario
-					$riga['vat_percent'], // aliquota iva
-					$riga['vat_code'], // codice iva
-					'', // id documento
-					'', // data documento
-					$riga['net_amount'], // imponibile
-					$riga['amount'], // imponibile + imposta
-					$riga['vat_amount'], // imposta
-					'0501', // codice negozio emittente
-					'', // codice negozio ricevente
-					'', // id documento
-					'', // data documento
-					'', // numitem
-					'', // tipo cessione
-					'', // tipo sconto maggiorazione
-					'', // perc sconto maggiorazione
-					'', // importo sconto maggiorazione
-					'NUMERO SCONTRINO', // altri dati gestionali tipo
-					$fattura['trans_num'] . '/' . $fattura['till_code'], // altri dati gestionali riferim. testo
-					$fattura['trans_num'], // altri dati gestionali riferim. num.
-					str_replace('-', '', $fattura['trans_date']), // altri dati gestionali riferim. data
-					'', // altri dati gestionali tipo 2
-					'', // altri dati gestionali riferim. testo 2
-					'', // altri dati gestionali riferim. num. 2
-					'', // altri dati gestionali riferim. data 2
-					'',
-					'',
-					''
-				);
-			}
+            foreach ($fattura['rows'] as $riga) {
+                $righe[] = sprintf(
+                    '%s;%s;%04d;%s;%s;%s;%s;%s;%s;%s;%s;%.2f;%.2f;%.2f;%d;%s;%s;%.2f;%.2f;%.2f;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;',
+                    '500', // tipo record
+                    $fattura['invoice_num'], // numero fattura
+                    ++$contatore, // progressivo
+                    'codice interno', // tipo codice 1
+                    $riga['code'], // valore codice 1
+                    '', // tipo codice 2
+                    '', // valore codice 2
+                    '', // tipo codice 3
+                    '', // valore codice 3
+                    $riga['description'], // descrizione articolo
+                    '', // unità misura articolo
+                    $riga['qty_weight'], // quantita
+                    $riga['qty_weight'] != 0.00 ? $riga['amount'] / $riga['qty_weight'] : 0.00, // prezzo unitario
+                    $riga['vat_percent'], // aliquota iva
+                    $riga['vat_code'], // codice iva
+                    '', // id documento
+                    '', // data documento
+                    $riga['net_amount'], // imponibile
+                    $riga['amount'], // imponibile + imposta
+                    $riga['vat_amount'], // imposta
+                    '0501', // codice negozio emittente
+                    '', // codice negozio ricevente
+                    '', // id documento
+                    '', // data documento
+                    '', // numitem
+                    '', // tipo cessione
+                    '', // tipo sconto maggiorazione
+                    '', // perc sconto maggiorazione
+                    '', // importo sconto maggiorazione
+                    'NUMERO SCONTRINO', // altri dati gestionali tipo
+                    $fattura['trans_num'] . '/' . $fattura['till_code'], // altri dati gestionali riferim. testo
+                    $fattura['trans_num'], // altri dati gestionali riferim. num.
+                    str_replace('-', '', $fattura['trans_date']), // altri dati gestionali riferim. data
+                    '', // altri dati gestionali tipo 2
+                    '', // altri dati gestionali riferim. testo 2
+                    '', // altri dati gestionali riferim. num. 2
+                    '', // altri dati gestionali riferim. data 2
+                    '',
+                    '',
+                    ''
+                );
+            }
 
-			foreach ($fattura['vats'] as $riga) {
-				$righe[] = sprintf('%s;%s;%04d;%s;%.2f;%d;%.2f;%.2f;',
-					'800', // tipo record
-					$fattura['invoice_num'], // numero fattura
-					++$contatore, // progressivo
-					str_replace('-', '', $fattura['invoice_date']), // data fattura
-					$riga['vat_percent'], // aliquota iva
-					$riga['vat_code'], // codice iva
-					$riga['net_amount'], // imponibile
-					$riga['vat_amount'] // imposta
-				);
-			}
+            foreach ($fattura['vats'] as $riga) {
+                $righe[] = sprintf(
+                    '%s;%s;%04d;%s;%.2f;%d;%.2f;%.2f;',
+                    '800', // tipo record
+                    $fattura['invoice_num'], // numero fattura
+                    ++$contatore, // progressivo
+                    str_replace('-', '', $fattura['invoice_date']), // data fattura
+                    $riga['vat_percent'], // aliquota iva
+                    $riga['vat_code'], // codice iva
+                    $riga['net_amount'], // imponibile
+                    $riga['vat_amount'] // imposta
+                );
+            }
 
-			$righe[] = sprintf('%s;%s;%04d;%.2f;%.2f;%.2f;%s;%s;%s;%s;%s;%s;%s;%s;%s;%.2f,%s;%s;%s;',
-				'900', // tipo record
-				$fattura['invoice_num'], // numero fattura
-				++$contatore, // progressivo
-				$fattura['net_amount'], // imponibile
-				$fattura['vat_amount'], // imposta
-				$fattura['gross_amount'], // totale fattura
-				'', // tipo sconto maggiorazione
-				'', // percentuale sconto maggiorazione
-				'', // importo sconto maggiorazione
-				'TP02', // condizioni di pagamento
-				'MP01', // modalita di pagamento
-				str_replace('-', '', $fattura['trans_date']), // data riferimento termini di pagamento
-				'', // giorni termini di pagamento
-				'', // data scadenza pagamento
-				'', // iban
-				0, // importo da pagare
-				'', // email
-				'', // numero telefono
-				'' // codice univoco
-			);
+            $righe[] = sprintf(
+                '%s;%s;%04d;%.2f;%.2f;%.2f;%s;%s;%s;%s;%s;%s;%s;%s;%s;%.2f,%s;%s;%s;',
+                '900', // tipo record
+                $fattura['invoice_num'], // numero fattura
+                ++$contatore, // progressivo
+                $fattura['net_amount'], // imponibile
+                $fattura['vat_amount'], // imposta
+                $fattura['gross_amount'], // totale fattura
+                '', // tipo sconto maggiorazione
+                '', // percentuale sconto maggiorazione
+                '', // importo sconto maggiorazione
+                'TP02', // condizioni di pagamento
+                'MP01', // modalita di pagamento
+                str_replace('-', '', $fattura['trans_date']), // data riferimento termini di pagamento
+                '', // giorni termini di pagamento
+                '', // data scadenza pagamento
+                '', // iban
+                0, // importo da pagare
+                '', // email
+                '', // numero telefono
+                '' // codice univoco
+            );
+        }
 
-		}
+        if (count($righe)) {
+            $righe[] = sprintf(
+                '%s;%s;%s;',
+                '999', // tipo record
+                date('Ymd'), // data elaborazione
+                date('His') // ora elaborazione
+            );
+        }
 
-		if (count($righe)) {
-			$righe[] = sprintf('%s;%s;%s;',
-				'999', // tipo record
-				date('Ymd'), // data elaborazione
-				date('His') // ora elaborazione
-			);
-		}
+        return implode("\r\n", $righe);
+    }
 
-		return implode("\r\n", $righe);
-	}
+    public function elencoFattureEmesse(): string
+    {
+        $conn = new \PDO(
+            "sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname,
+            $this->username,
+            $this->password
+        );
 
-	public function elencoFattureEmesse(): string
-	{
+        $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $conn->setAttribute(\PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10);
 
-		$conn = new \PDO("sqlsrv:Server=" . $this->hostname . ",9089;Database=" . $this->dbname, $this->username, $this->password);
+        $conn->query(
+            "update TCPOS4.dbo.transactions set exported = 0 where fiscal_invoice is not NULL and exported is NULL;"
+        );
 
-		$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-		$conn->setAttribute(\PDO::SQLSRV_ATTR_QUERY_TIMEOUT, 10);
-
-		$conn->query("update TCPOS4.dbo.transactions set exported = 0 where fiscal_invoice is not NULL and exported is NULL;");
-
-		$sql = "    select 
+        $sql = "    select 
                         t.id,
                         t.fiscal_invoice invoice_num,
                         convert(date, t.invoice_date) invoice_date,
@@ -1160,92 +1318,177 @@ class VTcp_transazioni
                         join TCPOS4.dbo.tills t2 on t.till_id = t2.id 
                     where t.fiscal_invoice is not NULL and t.exported = 0;";
 
-		$elencoFatture = [];
+        $elencoFatture = [];
 
-		$stmt = $conn->query($sql);
-		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-			if ($row['shop_code'] == '0501') {
-				$row['invoice_num'] = '51-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0502') {
-				$row['invoice_num'] = '52-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0503') {
-				$row['invoice_num'] = '53-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0201') {
-				$row['invoice_num'] = '51-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0155') {
-				$row['invoice_num'] = '52-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0142') {
-				$row['invoice_num'] = '53-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0203') {
-				$row['invoice_num'] = '54-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0132') {
-				$row['invoice_num'] = '55-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0148') {
-				$row['invoice_num'] = '56-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0115') {
-				$row['invoice_num'] = '57-' . $row['invoice_num'];
-			} elseif ($row['shop_code'] == '0204') {
-				$row['invoice_num'] = '58-' . $row['invoice_num'];
-			} else {
-				$row['invoice_num'] = '00-' . $row['invoice_num'];
-			}
+        $stmt = $conn->query($sql);
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            if ($row['shop_code'] == '0501') {
+                $row['invoice_num'] = '51-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0502') {
+                $row['invoice_num'] = '52-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0503') {
+                $row['invoice_num'] = '53-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0201') {
+                $row['invoice_num'] = '51-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0155') {
+                $row['invoice_num'] = '52-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0142') {
+                $row['invoice_num'] = '53-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0203') {
+                $row['invoice_num'] = '54-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0132') {
+                $row['invoice_num'] = '55-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0148') {
+                $row['invoice_num'] = '56-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0115') {
+                $row['invoice_num'] = '57-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0204') {
+                $row['invoice_num'] = '58-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0101') {
+                $row['invoice_num'] = '59-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0205') {
+                $row['invoice_num'] = '60-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0104') {
+                $row['invoice_num'] = '61-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0108') {
+                $row['invoice_num'] = '62-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0110') {
+                $row['invoice_num'] = '63-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0114') {
+                $row['invoice_num'] = '64-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0119') {
+                $row['invoice_num'] = '65-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0124') {
+                $row['invoice_num'] = '66-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0125') {
+                $row['invoice_num'] = '67-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0127') {
+                $row['invoice_num'] = '68-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0128') {
+                $row['invoice_num'] = '69-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0129') {
+                $row['invoice_num'] = '70-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0131') {
+                $row['invoice_num'] = '71-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0133') {
+                $row['invoice_num'] = '72-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0139') {
+                $row['invoice_num'] = '73-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0140') {
+                $row['invoice_num'] = '74-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0141') {
+                $row['invoice_num'] = '75-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0143') {
+                $row['invoice_num'] = '76-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0171') {
+                $row['invoice_num'] = '77-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0172') {
+                $row['invoice_num'] = '78-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0173') {
+                $row['invoice_num'] = '79-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0176') {
+                $row['invoice_num'] = '93-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0177') {
+                $row['invoice_num'] = '94-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0178') {
+                $row['invoice_num'] = '82-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '3151') {
+                $row['invoice_num'] = '83-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '3152') {
+                $row['invoice_num'] = '84-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '3661') {
+                $row['invoice_num'] = '85-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '3673') {
+                $row['invoice_num'] = '86-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '3682') {
+                $row['invoice_num'] = '87-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '3693') {
+                $row['invoice_num'] = '88-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '3694') {
+                $row['invoice_num'] = '89-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0188') {
+                $row['invoice_num'] = '90-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0190') {
+                $row['invoice_num'] = '91-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0202') {
+                $row['invoice_num'] = '92-' . $row['invoice_num'];
+            } else {
+                $row['invoice_num'] = '00-' . $row['invoice_num'];
+            }
 
-			$elencoFatture[] = $row;
-		}
+            $elencoFatture[] = $row;
+        }
 
-		return json_encode($elencoFatture);
-	}
+        return json_encode($elencoFatture);
+    }
 
-	public function testRiepvegi(array $request, $dataCollectTcPos): string
-	{
+    public function testRiepvegi(array $request, $dataCollectTcPos): string
+    {
+        $transactions = json_decode($dataCollectTcPos, true);
 
-		$transactions = json_decode($dataCollectTcPos, true);
+        $result = [];
+        foreach ($transactions as $transaction) {
+            foreach ($transaction['articles'] as $article) {
+                $quantita = round($article['quantity'], 2);
+                $venduto_alle_casse = round(
+                    round($article['article_price'], 2) +
+                    round($article['price_article_menu_addition'], 2) +
+                    round($article['discount'], 2),
+                    2
+                );
+                $venduto_a_listino = round(round($article['article_catalog_price_unit'], 2) * $quantita, 2);
+                $articolo_in_offerta = false;
+                if (round($venduto_alle_casse - $venduto_a_listino, 2) != 0.00) {
+                    $articolo_in_offerta = true;
+                }
+                $articolo_in_sconto = false;
+                if (round($article['discount'], 2) != 0.00) {
+                    $articolo_in_sconto = true;
+                }
 
-		$result = [];
-		foreach ($transactions as $transaction) {
-			foreach ($transaction['articles'] as $article) {
-				$quantita = round($article['quantity'], 2);
-				$venduto_alle_casse = round(round($article['article_price'], 2) +
-					round($article['price_article_menu_addition'], 2) +
-					round($article['discount'], 2), 2);
-				$venduto_a_listino = round(round($article['article_catalog_price_unit'], 2) * $quantita, 2);
-				$articolo_in_offerta = false;
-				if (round($venduto_alle_casse - $venduto_a_listino, 2) != 0.00) {
-					$articolo_in_offerta = true;
-				}
-				$articolo_in_sconto = false;
-				if (round($article['discount'], 2) != 0.00) {
-					$articolo_in_sconto = true;
-				}
+                if (key_exists($article['article_code'], $result)) {
+                    $selectedArticle = $result[$article['article_code']];
 
-				if (key_exists($article['article_code'], $result)) {
-					$selectedArticle = $result[$article['article_code']];
+                    $selectedArticle['quantita'] += $quantita;
+                    $selectedArticle['quantita_in_offerta'] += ($articolo_in_offerta) ? $quantita : 0.00;
+                    $selectedArticle['quantita_in_sconto'] += ($articolo_in_sconto) ? $quantita : 0.00;
+                    $selectedArticle['venduto'] = round($selectedArticle['venduto'] + $venduto_alle_casse, 2);
+                    $selectedArticle['venduto_in_offerta'] = round(
+                        $selectedArticle['venduto_in_offerta'] + ($articolo_in_offerta) ? round(
+                            $venduto_alle_casse,
+                            2
+                        ) : 0.00,
+                        2
+                    );
+                    $selectedArticle['venduto_in_sconto'] = round(
+                        $selectedArticle['venduto_in_sconto'] + ($articolo_in_sconto) ? round(
+                            $article['discount'],
+                            2
+                        ) : 0.00,
+                        2
+                    );
+                    $selectedArticle['venduto_a_listino'] = round(
+                        $selectedArticle['venduto_a_listino'] + round($venduto_a_listino, 2),
+                        2
+                    );
 
-					$selectedArticle['quantita'] += $quantita;
-					$selectedArticle['quantita_in_offerta'] += ($articolo_in_offerta) ? $quantita : 0.00;
-					$selectedArticle['quantita_in_sconto'] += ($articolo_in_sconto) ? $quantita : 0.00;
-					$selectedArticle['venduto'] = round($selectedArticle['venduto'] + $venduto_alle_casse, 2);
-					$selectedArticle['venduto_in_offerta'] = round($selectedArticle['venduto_in_offerta'] + ($articolo_in_offerta) ? round($venduto_alle_casse, 2) : 0.00, 2);
-					$selectedArticle['venduto_in_sconto'] = round($selectedArticle['venduto_in_sconto'] + ($articolo_in_sconto) ? round($article['discount'], 2) : 0.00, 2);
-					$selectedArticle['venduto_a_listino'] = round($selectedArticle['venduto_a_listino'] + round($venduto_a_listino, 2), 2);
+                    $result[$article['article_code']] = $selectedArticle;
+                } else {
+                    $result[$article['article_code']] = [
+                        'sede' => $request['sede'],
+                        'data' => $request['data'],
+                        'quantita' => $quantita,
+                        'quantita_in_offerta' => ($articolo_in_offerta) ? $quantita : 0.00,
+                        'quantita_in_sconto' => ($articolo_in_sconto) ? $quantita : 0.00,
+                        'venduto' => $venduto_alle_casse,
+                        'venduto_in_offerta' => ($articolo_in_offerta) ? $venduto_alle_casse : 0.00,
+                        'venduto_in_sconto' => ($articolo_in_sconto) ? round($article['discount'], 2) : 0.00,
+                        'venduto_a_listino' => $venduto_a_listino,
+                    ];
+                }
+            }
+        }
 
-					$result[$article['article_code']] = $selectedArticle;
-				} else {
-					$result[$article['article_code']] = [
-						'sede' => $request['sede'],
-						'data' => $request['data'],
-						'quantita' => $quantita,
-						'quantita_in_offerta' => ($articolo_in_offerta) ? $quantita : 0.00,
-						'quantita_in_sconto' => ($articolo_in_sconto) ? $quantita : 0.00,
-						'venduto' => $venduto_alle_casse,
-						'venduto_in_offerta' => ($articolo_in_offerta) ? $venduto_alle_casse : 0.00,
-						'venduto_in_sconto' => ($articolo_in_sconto) ? round($article['discount'], 2) : 0.00,
-						'venduto_a_listino' => $venduto_a_listino,
-					];
-				}
-			}
-		}
-
-		return json_encode($result);
-	}
+        return json_encode($result);
+    }
 }
