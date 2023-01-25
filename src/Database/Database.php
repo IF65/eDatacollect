@@ -108,6 +108,33 @@ class Database
             }
 
             return json_encode($result, true);
+        } elseif ($request['sede'] == '0134') {
+            $result = [];
+
+            $casseASAR = json_decode($this->t_idc->recuperaDatiPerQuadratura($request), true);
+            foreach ($casseASAR as $riga) {
+                $result[] = $riga;
+            }
+
+            $request['sede'] = '7134';
+            $casseCC = json_decode($this->t_idc->recuperaDatiPerQuadratura($request), true);
+            foreach ($casseCC as $riga) {
+                if (preg_match('/^(7134)(.*)$/', $riga['id'], $matches)) {
+                    $riga['id'] = '0134' . $matches[2];
+                }
+                $result[] = $riga;
+            }
+
+            $request['sede'] = '8134';
+            $casseHD = json_decode($this->t_idc->recuperaDatiPerQuadratura($request), true);
+            foreach ($casseCC as $riga) {
+                if (preg_match('/^(8134)(.*)$/', $riga['id'], $matches)) {
+                    $riga['id'] = '0134' . $matches[2];
+                }
+                $result[] = $riga;
+            }
+
+            return $result;
         } elseif ($request['sede'] == '0502' || $request['sede'] == '0503') {
             return $this->v_tcp_transazioni->recuperaDatiPerQuadratura($request);
         } else {
