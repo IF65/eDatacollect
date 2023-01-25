@@ -127,14 +127,14 @@ class Database
 
             $request['sede'] = '8134';
             $casseHD = json_decode($this->t_idc->recuperaDatiPerQuadratura($request), true);
-            foreach ($casseCC as $riga) {
+            foreach ($casseHD as $riga) {
                 if (preg_match('/^(8134)(.*)$/', $riga['id'], $matches)) {
                     $riga['id'] = '0134' . $matches[2];
                 }
                 $result[] = $riga;
             }
 
-            return $result;
+            return json_encode($result, true);
         } elseif ($request['sede'] == '0502' || $request['sede'] == '0503') {
             return $this->v_tcp_transazioni->recuperaDatiPerQuadratura($request);
         } else {
