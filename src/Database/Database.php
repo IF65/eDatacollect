@@ -131,7 +131,19 @@ class Database
                 if (preg_match('/^(8134)(.*)$/', $riga['id'], $matches)) {
                     $riga['id'] = '0134' . $matches[2];
                 }
-                $result[] = $riga;
+
+                $found = false;
+                foreach ($result as $k => $row) {
+                    if ($row['tipo'] == $riga['tipo'] && $row['id'] == $riga['id']) {
+                        $result[$k]['s1'] += $riga['s1'];
+                        $result[$k]['s2'] += $riga['s2'];
+                        $found = true;
+                    }
+                }
+
+                if (!$found) {
+                    $result[] = $riga;
+                }
             }
 
             return json_encode($result, true);
