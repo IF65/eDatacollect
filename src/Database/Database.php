@@ -134,7 +134,7 @@ class Database
 
                 $found = false;
                 foreach ($result as $k => $row) {
-                    if ($row['tipo'] == $riga['tipo'] && $row['id'] == $riga['id']) {
+                    if ($row['tipo'] == $riga['tipo'] && $row['id'] == $riga['id'] && $row['codice'] == $riga['codice']) {
                         $result[$k]['s1'] += $riga['s1'];
                         $result[$k]['s2'] += $riga['s2'];
                         $found = true;

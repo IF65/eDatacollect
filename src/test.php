@@ -23,7 +23,7 @@ $rows = json_decode($result, true);
 
 $filteredRows = [];
 foreach ($rows as $row) {
-    if ($row['tipo'] == 'F' && preg_match('/07\d$/', $row['id'])) {
+    if ($row['tipo'] == 'T' && preg_match('/07\d$/', $row['id'])) {
         $filteredRows[] = $row;
     }
 }
