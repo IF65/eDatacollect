@@ -122,7 +122,20 @@ class Database
                 if (preg_match('/^(7134)(.*)$/', $riga['id'], $matches)) {
                     $riga['id'] = '0134' . $matches[2];
                 }
-                $result[] = $riga;
+
+                $found = false;
+                foreach ($result as $k => $row) {
+                    if ($row['tipo'] == $riga['tipo'] && $row['id'] == $riga['id'] && $row['codice'] == $riga['codice']) {
+                        $result[$k]['s1'] += $riga['s1'];
+                        $result[$k]['s2'] += $riga['s2'];
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if (!$found) {
+                    $result[] = $riga;
+                }
             }
 
             $request['sede'] = '8134';
@@ -138,6 +151,7 @@ class Database
                         $result[$k]['s1'] += $riga['s1'];
                         $result[$k]['s2'] += $riga['s2'];
                         $found = true;
+                        break;
                     }
                 }
 

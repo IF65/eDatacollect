@@ -13,7 +13,7 @@ $db = new Database($sqlDetails);
 
 $request = [
     'function' => 'recuperaDatiPerQuadratura',
-    'data' => '2023-01-23',
+    'data' => '2023-01-31',
     'sede' => '0134'
 ];
 
@@ -23,7 +23,7 @@ $rows = json_decode($result, true);
 
 $filteredRows = [];
 foreach ($rows as $row) {
-    if ($row['tipo'] == 'T' && preg_match('/07\d$/', $row['id'])) {
+    if ($row['tipo'] == 'I' ) {
         $filteredRows[] = $row;
     }
 }
