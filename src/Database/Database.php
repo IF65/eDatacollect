@@ -86,7 +86,7 @@ class Database
             $request['sede'] == '0127' || $request['sede'] == '0119' || $request['sede'] == '0143' || $request['sede'] == '0124' ||
             $request['sede'] == '0141' || $request['sede'] == '0114' || $request['sede'] == '0177' || $request['sede'] == '3682' ||
             $request['sede'] == '0128' || $request['sede'] == '0202' || $request['sede'] == '0140' || $request['sede'] == '3693' ||
-            $request['sede'] == '0172' || $request['sede'] == '0176' || $request['sede'] == '0463'
+            $request['sede'] == '0172' || $request['sede'] == '0176' || $request['sede'] == '0463' || $request['sede'] == '0138'
         ) {
             $casseTCPOS = json_decode($this->v_tcp_transazioni->recuperaDatiPerQuadratura($request), true);
             $casseASAR = json_decode($this->t_idc->recuperaDatiPerQuadratura($request), true);

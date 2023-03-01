@@ -956,6 +956,8 @@ class VTcp_transazioni
                     $row['invoice_num'] = '92-' . $row['invoice_num'];
                 } elseif ($row['shop_code'] == '0463') {
                     $row['invoice_num'] = '97-' . $row['invoice_num'];
+                } elseif ($row['shop_code'] == '0138') {
+                    $row['invoice_num'] = '98-' . $row['invoice_num'];
                 } else {
                     $row['invoice_num'] = '00-' . $row['invoice_num'];
                 }
@@ -1412,6 +1414,8 @@ class VTcp_transazioni
                 $row['invoice_num'] = '92-' . $row['invoice_num'];
             } elseif ($row['shop_code'] == '0463') {
                 $row['invoice_num'] = '97-' . $row['invoice_num'];
+            } elseif ($row['shop_code'] == '0138') {
+                $row['invoice_num'] = '98-' . $row['invoice_num'];
             } else {
                 $row['invoice_num'] = '00-' . $row['invoice_num'];
             }
